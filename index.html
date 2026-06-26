@@ -11,444 +11,421 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --gold:#c9973a;--gold2:#e2b96a;
-  --ink:#0e0e13;--ink2:#16161e;
+  --gold:#c9973a;--gold2:#e2b96a;--gold3:#f5dfa5;
+  --ink:#0e0e13;--ink2:#16161e;--ink3:#1f1f2a;
   --cream:#f9f7f2;--muted:#7a7a8c;--muted2:#b0b0c0;
   --border:#2a2a38;--border2:#38384a;
   --card:#18181f;--card2:#202028;
-  --green:#22c55e;--green-bg:rgba(34,197,94,.1);
-  --blue:#3b82f6;--blue-bg:rgba(59,130,246,.1);
-  --warn:#f59e0b;--warn-bg:rgba(245,158,11,.1);
+  --green:#22c55e;--green-bg:rgba(34,197,94,.1);--green-border:rgba(34,197,94,.25);
+  --blue:#3b82f6;--blue-bg:rgba(59,130,246,.1);--blue-border:rgba(59,130,246,.25);
+  --warn:#f59e0b;--warn-bg:rgba(245,158,11,.1);--warn-border:rgba(245,158,11,.25);
+  --red:#ef4444;
 }
 html{scroll-behavior:smooth}
 body{background:var(--ink);color:var(--cream);font-family:'Inter',sans-serif;font-size:16px;line-height:1.65;min-height:100vh}
 ::selection{background:var(--gold);color:var(--ink)}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--ink)}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
-
-/* HEADER */
-header{padding:1.5rem 6vw;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.logo{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;color:var(--cream)}.logo em{color:var(--gold);font-style:italic}
-.logo-sub{font-size:.75rem;color:var(--muted);margin-top:2px}
-
-/* MAIN */
-main{max-width:780px;margin:0 auto;padding:3rem 6vw 6rem}
-
-/* PROGRESS BAR */
-.prog-bar{display:flex;gap:0;margin-bottom:2.5rem;border:1px solid var(--border);border-radius:6px;overflow:hidden}
-.prog-seg{flex:1;padding:.5rem;text-align:center;font-size:.72rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .2s;border-right:1px solid var(--border)}
+header{padding:1.25rem 6vw;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(14,14,19,.97);backdrop-filter:blur(12px);z-index:50}
+.logo{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:600;color:var(--cream)}.logo em{color:var(--gold);font-style:italic}
+.logo-sub{font-size:.72rem;color:var(--muted);margin-top:1px}
+main{max-width:800px;margin:0 auto;padding:2.5rem 6vw 6rem}
+#screen-upload{display:block}
+.upload-hero{text-align:center;padding:2rem 0 1.5rem}
+.upload-hero h1{font-family:'Fraunces',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:600;line-height:1.15;letter-spacing:-.02em;margin-bottom:.75rem}
+.upload-hero h1 em{font-style:italic;color:var(--gold2)}
+.upload-hero p{font-size:.95rem;color:var(--muted2);max-width:480px;margin:0 auto;line-height:1.7}
+.upload-options{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:2rem 0}
+.upload-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.5rem;cursor:pointer;transition:border-color .2s,background .2s;position:relative;text-align:center}
+.upload-card:hover{border-color:var(--gold);background:var(--card2)}
+.upload-card input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-card-icon{font-size:2rem;margin-bottom:.75rem}
+.upload-card h3{font-size:.95rem;font-weight:600;color:var(--cream);margin-bottom:.4rem}
+.upload-card p{font-size:.8rem;color:var(--muted);line-height:1.5}
+.upload-card .badge{display:inline-block;font-size:.68rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;background:rgba(201,151,58,.12);color:var(--gold2);border:1px solid rgba(201,151,58,.25);padding:.18rem .6rem;border-radius:3px;margin-bottom:.6rem}
+.divider-or{display:flex;align-items:center;gap:1rem;margin:1.5rem 0;color:var(--muted);font-size:.8rem}
+.divider-or::before,.divider-or::after{content:'';flex:1;height:1px;background:var(--border)}
+.btn-manual{width:100%;background:none;border:1px solid var(--border2);color:var(--muted2);border-radius:6px;padding:.75rem;font-size:.875rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.btn-manual:hover{border-color:var(--gold);color:var(--gold)}
+.how-to{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.25rem 1.5rem;margin-top:1.5rem}
+.how-to h4{font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.85rem;display:flex;align-items:center;gap:.5rem}
+.how-to h4::before{content:'';width:14px;height:1px;background:var(--gold)}
+.how-steps{display:flex;flex-direction:column;gap:.5rem}
+.how-step{display:flex;align-items:flex-start;gap:.75rem;font-size:.83rem;color:var(--muted2);line-height:1.5}
+.how-num{width:20px;height:20px;border-radius:50%;background:var(--ink2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:600;color:var(--gold);flex-shrink:0;margin-top:1px}
+#screen-loading{display:none;text-align:center;padding:4rem 0}
+.loading-icon{width:64px;height:64px;border-radius:50%;background:rgba(201,151,58,.1);border:2px solid rgba(201,151,58,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:1.75rem;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.95)}}
+#screen-loading h2{font-family:'Fraunces',serif;font-size:1.4rem;color:var(--cream);margin-bottom:.5rem}
+#screen-loading p{font-size:.875rem;color:var(--muted);line-height:1.6}
+.loading-bar{width:280px;height:3px;background:var(--border2);border-radius:2px;margin:1.5rem auto 0;overflow:hidden}
+.loading-bar-fill{height:100%;background:var(--gold);border-radius:2px;animation:barfill 3s ease-in-out forwards}
+@keyframes barfill{0%{width:0}80%{width:85%}100%{width:85%}}
+#screen-form{display:none}
+.ai-banner{background:var(--green-bg);border:1px solid var(--green-border);border-radius:6px;padding:.85rem 1rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:#86efac}
+.prog-bar{display:flex;gap:0;margin-bottom:2rem;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.prog-seg{flex:1;padding:.45rem .25rem;text-align:center;font-size:.68rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .2s;border-right:1px solid var(--border)}
 .prog-seg:last-child{border-right:none}
 .prog-seg.active{background:var(--gold);color:var(--ink)}
 .prog-seg.done{background:var(--card);color:var(--gold)}
-
-/* STEPS */
 .step{display:none}.step.active{display:block}
-
-/* CARDS */
-.form-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.75rem;margin-bottom:1rem}
-.card-title{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem;display:flex;align-items:center;gap:.6rem}
-.card-title::before{content:'';width:16px;height:1px;background:var(--gold)}
-
-/* FIELDS */
-.field{margin-bottom:1rem}
-.field:last-child{margin-bottom:0}
-.field label{display:block;font-size:.8rem;font-weight:500;color:var(--muted2);margin-bottom:.4rem}
-.field input,.field textarea,.field select{width:100%;padding:.6rem .85rem;background:var(--ink2);border:1px solid var(--border2);border-radius:5px;color:var(--cream);font-size:.9rem;font-family:'Inter',sans-serif;transition:border-color .2s}
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin-bottom:1rem}
+.card-title{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:1.1rem;display:flex;align-items:center;gap:.5rem}
+.card-title::before{content:'';width:14px;height:1px;background:var(--gold)}
+.field{margin-bottom:.85rem}.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:.78rem;font-weight:500;color:var(--muted2);margin-bottom:.35rem}
+.field input,.field textarea,.field select{width:100%;padding:.55rem .8rem;background:var(--ink2);border:1px solid var(--border2);border-radius:5px;color:var(--cream);font-size:.875rem;font-family:'Inter',sans-serif;transition:border-color .2s}
 .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--gold)}
 .field textarea{resize:vertical;min-height:80px;line-height:1.6}
 .field select option{background:var(--ink2)}
-.field .hint{font-size:.75rem;color:var(--muted);margin-top:.3rem}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
-
-/* COLOR PICKER */
-.color-row{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:.5rem}
-.color-opt{width:38px;height:38px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .2s;position:relative}
+.field .hint{font-size:.72rem;color:var(--muted);margin-top:.3rem}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+.color-row{display:flex;gap:.65rem;flex-wrap:wrap;margin-top:.5rem}
+.color-opt{width:34px;height:34px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .2s;position:relative}
 .color-opt.sel{border-color:var(--cream);transform:scale(1.12)}
 .color-opt:hover{transform:scale(1.08)}
-.color-opt.sel::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;font-weight:700}
-
-/* ITEM LIST */
-.item-list{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.75rem}
-.item-card{background:var(--ink2);border:1px solid var(--border2);border-radius:5px;padding:.75rem 1rem;display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
+.color-opt.sel::after{content:'checkmark';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;font-weight:700;content:'✓'}
+.item-list{display:flex;flex-direction:column;gap:.45rem;margin-bottom:.65rem}
+.item-card{background:var(--ink2);border:1px solid var(--border2);border-radius:5px;padding:.65rem .9rem;display:flex;align-items:flex-start;justify-content:space-between;gap:.65rem}
 .item-card-body{flex:1;min-width:0}
-.item-card-title{font-size:.875rem;font-weight:600;color:var(--cream)}
-.item-card-sub{font-size:.78rem;color:var(--muted);margin-top:.2rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.btn-rm{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;line-height:1;padding:0 2px;flex-shrink:0;transition:color .2s}
-.btn-rm:hover{color:#ef4444}
-
-/* ADD FORM */
-.add-form{background:var(--ink2);border:1px solid var(--border2);border-radius:6px;padding:1rem;margin-top:.5rem;display:none}
+.item-card-title{font-size:.84rem;font-weight:600;color:var(--cream)}
+.item-card-sub{font-size:.76rem;color:var(--muted);margin-top:.15rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn-rm{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;line-height:1;padding:0 2px;flex-shrink:0;transition:color .2s}.btn-rm:hover{color:var(--red)}
+.add-form{background:var(--ink2);border:1px solid var(--border2);border-radius:6px;padding:.9rem;margin-top:.45rem;display:none}
 .add-form.open{display:block}
-.add-form-actions{display:flex;gap:.5rem;margin-top:.75rem}
-.btn-save{background:var(--gold);color:var(--ink);border:none;border-radius:4px;padding:.5rem 1.25rem;font-size:.82rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s}
-.btn-save:hover{background:var(--gold2)}
-.btn-cancel{background:none;border:1px solid var(--border2);color:var(--muted2);border-radius:4px;padding:.5rem 1.25rem;font-size:.82rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
-.btn-cancel:hover{border-color:var(--muted);color:var(--cream)}
-.btn-add-item{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--gold);background:none;border:1px dashed rgba(201,151,58,.4);border-radius:4px;padding:.45rem 1rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
-.btn-add-item:hover{background:rgba(201,151,58,.08);border-color:var(--gold)}
-
-/* NAV */
-.nav-footer{display:flex;justify-content:space-between;align-items:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)}
-.btn-prev{background:none;border:1px solid var(--border2);color:var(--muted2);border-radius:5px;padding:.65rem 1.5rem;font-size:.875rem;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:.4rem;transition:all .2s}
-.btn-prev:hover{border-color:var(--muted);color:var(--cream)}
-.btn-next{background:var(--gold);color:var(--ink);border:none;border-radius:5px;padding:.65rem 1.75rem;font-size:.875rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:.4rem;transition:background .2s}
-.btn-next:hover{background:var(--gold2)}
-.btn-generate{background:var(--green);color:#fff;border:none;border-radius:5px;padding:.65rem 1.75rem;font-size:.875rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:.4rem;transition:all .2s}
-.btn-generate:hover{opacity:.9}
-.step-info{font-size:.8rem;color:var(--muted)}
-
-/* TUTORIAL */
-#tutorial{display:none}
-#tutorial.active{display:block}
-.tut-success{background:var(--green-bg);border:1px solid rgba(34,197,94,.25);border-radius:8px;padding:1.5rem;margin-bottom:2rem;display:flex;align-items:center;gap:1rem}
+.add-form-actions{display:flex;gap:.45rem;margin-top:.65rem}
+.btn-save{background:var(--gold);color:var(--ink);border:none;border-radius:4px;padding:.45rem 1.1rem;font-size:.8rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s}.btn-save:hover{background:var(--gold2)}
+.btn-cancel{background:none;border:1px solid var(--border2);color:var(--muted2);border-radius:4px;padding:.45rem 1.1rem;font-size:.8rem;cursor:pointer;font-family:'Inter',sans-serif}.btn-cancel:hover{border-color:var(--muted);color:var(--cream)}
+.btn-add-item{display:inline-flex;align-items:center;gap:.35rem;font-size:.8rem;color:var(--gold);background:none;border:1px dashed rgba(201,151,58,.35);border-radius:4px;padding:.4rem .9rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}.btn-add-item:hover{background:rgba(201,151,58,.07);border-color:var(--gold)}
+.nav-footer{display:flex;justify-content:space-between;align-items:center;margin-top:1.75rem;padding-top:1.25rem;border-top:1px solid var(--border)}
+.btn-prev{background:none;border:1px solid var(--border2);color:var(--muted2);border-radius:5px;padding:.6rem 1.4rem;font-size:.85rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}.btn-prev:hover{border-color:var(--muted);color:var(--cream)}
+.btn-next{background:var(--gold);color:var(--ink);border:none;border-radius:5px;padding:.6rem 1.6rem;font-size:.85rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s}.btn-next:hover{background:var(--gold2)}
+.btn-generate{background:var(--green);color:#fff;border:none;border-radius:5px;padding:.6rem 1.6rem;font-size:.85rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}.btn-generate:hover{opacity:.9}
+.step-info{font-size:.78rem;color:var(--muted)}
+#screen-tutorial{display:none}
+.tut-success{background:var(--green-bg);border:1px solid var(--green-border);border-radius:8px;padding:1.5rem;margin-bottom:2rem;display:flex;align-items:center;gap:1rem}
 .tut-success-icon{width:48px;height:48px;border-radius:50%;background:rgba(34,197,94,.2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
-.tut-success h2{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;color:var(--cream);margin-bottom:.25rem}
-.tut-success p{font-size:.875rem;color:var(--muted2);line-height:1.6}
+.tut-success h2{font-family:'Fraunces',serif;font-size:1.25rem;font-weight:600;color:var(--cream);margin-bottom:.25rem}
+.tut-success p{font-size:.85rem;color:var(--muted2);line-height:1.6}
 .tut-steps{display:flex;flex-direction:column;gap:0}
-.tut-step{display:grid;grid-template-columns:44px 1fr;gap:0 1rem;position:relative}
-.tut-step:not(:last-child) .tut-vline{position:absolute;left:21px;top:44px;bottom:0;width:1px;background:var(--border2)}
-.tut-num{width:44px;height:44px;border-radius:50%;background:var(--card);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:1rem;font-weight:600;color:var(--gold);flex-shrink:0;position:relative;z-index:1}
-.tut-num.done{background:var(--green-bg);border-color:rgba(34,197,94,.3);color:var(--green)}
-.tut-body{padding-bottom:1.75rem}
-.tut-step-title{font-size:.95rem;font-weight:600;color:var(--cream);padding-top:.6rem;margin-bottom:.4rem}
-.tut-step-desc{font-size:.86rem;color:var(--muted2);line-height:1.7;margin-bottom:.6rem}
-.tut-code{background:var(--ink);border:1px solid var(--border2);border-radius:5px;padding:.5rem .85rem;font-family:monospace;font-size:.82rem;color:var(--gold2);display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:.6rem}
+.tut-step{display:grid;grid-template-columns:42px 1fr;gap:0 1rem;position:relative}
+.tut-step:not(:last-child) .tut-vline{position:absolute;left:20px;top:42px;bottom:0;width:1px;background:var(--border2)}
+.tut-num{width:42px;height:42px;border-radius:50%;background:var(--card);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:.95rem;font-weight:600;color:var(--gold);flex-shrink:0;position:relative;z-index:1}
+.tut-num.done{background:var(--green-bg);border-color:var(--green-border);color:var(--green)}
+.tut-body{padding-bottom:1.5rem}
+.tut-step-title{font-size:.9rem;font-weight:600;color:var(--cream);padding-top:.65rem;margin-bottom:.35rem}
+.tut-step-desc{font-size:.83rem;color:var(--muted2);line-height:1.7;margin-bottom:.5rem}
+.tut-code{background:var(--ink);border:1px solid var(--border2);border-radius:5px;padding:.45rem .8rem;font-family:monospace;font-size:.8rem;color:var(--gold2);display:flex;align-items:center;justify-content:space-between;gap:.65rem;margin-bottom:.5rem}
 .tut-code span{word-break:break-all}
-.btn-copy{background:none;border:1px solid var(--border2);border-radius:3px;padding:.2rem .6rem;font-size:.72rem;color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;transition:all .15s}
-.btn-copy:hover{border-color:var(--gold);color:var(--gold)}
-.tut-warn{background:var(--warn-bg);border:1px solid rgba(245,158,11,.25);border-radius:5px;padding:.6rem .85rem;font-size:.8rem;color:var(--warn);display:flex;gap:.5rem;align-items:flex-start;margin-bottom:.6rem}
-.tut-info{background:var(--blue-bg);border:1px solid rgba(59,130,246,.25);border-radius:5px;padding:.6rem .85rem;font-size:.8rem;color:#93c5fd;display:flex;gap:.5rem;align-items:flex-start;margin-bottom:.6rem}
+.btn-copy{background:none;border:1px solid var(--border2);border-radius:3px;padding:.18rem .55rem;font-size:.7rem;color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;transition:all .15s}.btn-copy:hover{border-color:var(--gold);color:var(--gold)}
+.tut-warn{background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:5px;padding:.55rem .8rem;font-size:.78rem;color:var(--warn);margin-bottom:.5rem}
+.tut-info{background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:5px;padding:.55rem .8rem;font-size:.78rem;color:#93c5fd;margin-bottom:.5rem}
 .tut-final{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin-top:1.5rem;text-align:center}
-.tut-final h3{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;color:var(--cream);margin-bottom:.5rem}
-.tut-final p{font-size:.875rem;color:var(--muted2);margin-bottom:1rem;line-height:1.7}
-.tut-url{display:inline-block;background:var(--ink);border:1px solid rgba(201,151,58,.4);border-radius:5px;padding:.5rem 1rem;font-family:monospace;font-size:.82rem;color:var(--gold2);margin-bottom:1.25rem}
-.checklist{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.25rem;text-align:left;max-width:360px;margin-left:auto;margin-right:auto}
-.check-item{display:flex;align-items:center;gap:.6rem;font-size:.85rem;color:var(--muted2)}
-.check-item span.ok{color:var(--green);font-size:1rem}
-.btn-restart{background:none;border:1px solid var(--border2);color:var(--muted2);border-radius:5px;padding:.6rem 1.5rem;font-size:.85rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
-.btn-restart:hover{border-color:var(--gold);color:var(--gold)}
-
-/* MOCK visuals */
-.mock-upload{border:1px dashed var(--border2);border-radius:5px;padding:1rem;text-align:center;font-size:.8rem;color:var(--muted);margin-bottom:.6rem}
-.mock-btn-row{display:flex;gap:.5rem;margin-bottom:.6rem}
-.mock-btn{height:26px;border-radius:4px;border:1px solid var(--border2)}
-
-@media(max-width:600px){
-  .row2{grid-template-columns:1fr}
-  .row3{grid-template-columns:1fr 1fr}
-  .prog-seg{font-size:.6rem;padding:.4rem .25rem}
-}
+.tut-final h3{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;color:var(--cream);margin-bottom:.45rem}
+.tut-final p{font-size:.85rem;color:var(--muted2);margin-bottom:.85rem;line-height:1.7}
+.tut-url{display:inline-block;background:var(--ink);border:1px solid rgba(201,151,58,.35);border-radius:5px;padding:.45rem .9rem;font-family:monospace;font-size:.8rem;color:var(--gold2);margin-bottom:1.1rem}
+.checklist{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.1rem;text-align:left;max-width:360px;margin-left:auto;margin-right:auto}
+.check-item{display:flex;align-items:center;gap:.55rem;font-size:.83rem;color:var(--muted2)}
+.check-ok{color:var(--green)}
+.btn-restart{background:none;border:1px solid var(--border2);color:var(--muted2);border-radius:5px;padding:.55rem 1.4rem;font-size:.83rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}.btn-restart:hover{border-color:var(--gold);color:var(--gold)}
+@media(max-width:600px){.upload-options{grid-template-columns:1fr}.row2{grid-template-columns:1fr}.prog-seg{font-size:.58rem;padding:.4rem .15rem}}
 </style>
 </head>
 <body>
-
 <header>
   <div>
     <div class="logo">Gerador de <em>Portfólio</em></div>
-    <div class="logo-sub">Preencha, gere e publique o seu</div>
+    <div class="logo-sub">Powered by Claude AI</div>
   </div>
 </header>
-
 <main>
 
-<!-- PROGRESS -->
-<div class="prog-bar" id="progBar">
-  <div class="prog-seg active" onclick="jumpTo(1)">1. Pessoal</div>
-  <div class="prog-seg" onclick="jumpTo(2)">2. Experiência</div>
-  <div class="prog-seg" onclick="jumpTo(3)">3. Cases</div>
-  <div class="prog-seg" onclick="jumpTo(4)">4. Skills</div>
-  <div class="prog-seg" onclick="jumpTo(5)">5. Formação</div>
-  <div class="prog-seg" onclick="jumpTo(6)">6. Depoimentos</div>
+<div id="screen-upload">
+  <div class="upload-hero">
+    <h1>Seu portfólio em<br><em>minutos</em></h1>
+    <p>Faça upload do CV exportado do LinkedIn e a IA preenche tudo automaticamente. Ou preencha manualmente.</p>
+  </div>
+  <div class="upload-options">
+    <div class="upload-card">
+      <input type="file" id="input-pdf" accept=".pdf" onchange="handleFile(this,'pdf')">
+      <div class="upload-card-icon">📄</div>
+      <div class="badge">PDF</div>
+      <h3>CV em PDF</h3>
+      <p>Exporte seu perfil como PDF pelo LinkedIn e faça upload aqui</p>
+    </div>
+    <div class="upload-card">
+      <input type="file" id="input-zip" accept=".zip" onchange="handleFile(this,'zip')">
+      <div class="upload-card-icon">📦</div>
+      <div class="badge">ZIP / CSV</div>
+      <h3>Dados do LinkedIn</h3>
+      <p>Exporte seus dados completos (arquivo ZIP com CSVs) e faça upload aqui</p>
+    </div>
+  </div>
+  <div class="how-to">
+    <h4>Como exportar do LinkedIn</h4>
+    <div class="how-steps">
+      <div class="how-step"><div class="how-num">1</div><span>No LinkedIn, clique na sua foto → <strong>Ver perfil</strong></span></div>
+      <div class="how-step"><div class="how-num">2</div><span><strong>Para PDF:</strong> clique em <strong>Mais → Salvar como PDF</strong> no seu perfil</span></div>
+      <div class="how-step"><div class="how-num">3</div><span><strong>Para ZIP:</strong> vá em <strong>Configurações → Privacidade de dados → Obter cópia dos seus dados</strong></span></div>
+      <div class="how-step"><div class="how-num">4</div><span>Faça upload do arquivo acima — a IA extrai tudo automaticamente</span></div>
+    </div>
+  </div>
+  <div class="divider-or">ou</div>
+  <button class="btn-manual" onclick="showForm(false)">Preencher manualmente →</button>
 </div>
 
-<!-- STEP 1: DADOS PESSOAIS -->
-<div class="step active" id="step1">
-  <div class="form-card">
-    <div class="card-title">Identificação</div>
-    <div class="row2">
-      <div class="field"><label>Nome completo</label><input id="nome" placeholder="Ex: Ana Silva"/></div>
-      <div class="field"><label>Cargo principal</label><input id="cargo" placeholder="Ex: Product Manager"/></div>
-    </div>
-    <div class="row2">
-      <div class="field"><label>Cidade / Estado</label><input id="cidade" placeholder="Ex: São Paulo, SP"/></div>
-      <div class="field"><label>LinkedIn (URL)</label><input id="linkedin" placeholder="https://linkedin.com/in/seu-perfil"/></div>
-    </div>
-  </div>
-
-  <div class="form-card">
-    <div class="card-title">Textos do hero</div>
-    <div class="field"><label>Tagline principal</label><input id="tagline" placeholder="Ex: Construindo produtos com impacto real na vida das pessoas"/></div>
-    <div class="field"><label>Especialidades</label><input id="especialidades" placeholder="Ex: PM · PO · Crédito · Pagamentos · Banking · Tecnologia"/></div>
-    <div class="field"><label>Descrição do hero</label><textarea id="hero_desc" placeholder="Texto de destaque que aparece logo abaixo das especialidades. Fale sobre seu diferencial..."></textarea></div>
-  </div>
-
-  <div class="form-card">
-    <div class="card-title">Seção Sobre</div>
-    <div class="field"><label>Subtítulo da seção</label><input id="sobre_titulo" placeholder="Ex: PM que entende produto por dentro"/></div>
-  </div>
-
-  <div class="form-card">
-    <div class="card-title">Tema de cores</div>
-    <div class="field">
-      <label>Escolha a cor de destaque do portfólio</label>
-      <div class="color-row" id="paletas">
-        <div class="color-opt sel" data-pal="gold" style="background:#c9973a" title="Dourado"></div>
-        <div class="color-opt" data-pal="blue" style="background:#2563eb" title="Azul"></div>
-        <div class="color-opt" data-pal="teal" style="background:#0d9488" title="Verde-azulado"></div>
-        <div class="color-opt" data-pal="purple" style="background:#7c3aed" title="Roxo"></div>
-        <div class="color-opt" data-pal="red" style="background:#dc2626" title="Vermelho"></div>
-        <div class="color-opt" data-pal="pink" style="background:#db2777" title="Rosa"></div>
-      </div>
-      <div class="hint">A cor aparece em destaques, títulos e botões do portfólio</div>
-    </div>
-  </div>
-
-  <div class="nav-footer">
-    <span class="step-info">Passo 1 de 6</span>
-    <button class="btn-next" onclick="navTo(2)">Próximo →</button>
-  </div>
+<div id="screen-loading">
+  <div class="loading-icon">🤖</div>
+  <h2>Lendo seu LinkedIn...</h2>
+  <p id="loading-msg">Extraindo nome, cargo, experiências e formação.<br>Isso leva alguns segundos.</p>
+  <div class="loading-bar"><div class="loading-bar-fill"></div></div>
 </div>
 
-<!-- STEP 2: EXPERIÊNCIAS -->
-<div class="step" id="step2">
-  <div class="form-card">
-    <div class="card-title">Texto da seção Sobre</div>
-    <div class="field">
-      <label>Conte sua trajetória em parágrafos</label>
-      <textarea id="sobre_texto" style="min-height:160px" placeholder="Separe cada parágrafo com uma linha em branco.&#10;&#10;Ex:&#10;Comecei minha carreira na SINOVA Sistemas...&#10;&#10;Na Função Sistemas, me aprofundei no mundo financeiro..."></textarea>
-      <div class="hint">Cada bloco separado por linha em branco vira um parágrafo na seção Sobre</div>
-    </div>
+<div id="screen-form">
+  <div class="ai-banner" id="ai-banner" style="display:none">
+    <span>✨</span>
+    <span>Campos preenchidos automaticamente pelo Claude AI — revise e ajuste antes de gerar.</span>
+  </div>
+  <div class="prog-bar" id="progBar">
+    <div class="prog-seg active" onclick="jumpTo(1)">1. Pessoal</div>
+    <div class="prog-seg" onclick="jumpTo(2)">2. Experiência</div>
+    <div class="prog-seg" onclick="jumpTo(3)">3. Cases</div>
+    <div class="prog-seg" onclick="jumpTo(4)">4. Skills</div>
+    <div class="prog-seg" onclick="jumpTo(5)">5. Formação</div>
+    <div class="prog-seg" onclick="jumpTo(6)">6. Depoimentos</div>
   </div>
 
-  <div class="form-card">
-    <div class="card-title">Timeline de experiências</div>
-    <div class="item-list" id="exp-list"></div>
-    <button class="btn-add-item" onclick="toggle('exp-form')">+ Adicionar experiência</button>
-    <div class="add-form" id="exp-form">
+  <div class="step active" id="step1">
+    <div class="form-card">
+      <div class="card-title">Identificação</div>
       <div class="row2">
-        <div class="field"><label>Período</label><input id="exp-periodo" placeholder="Ex: 2024 / Atual"/></div>
-        <div class="field"><label>Cargo</label><input id="exp-cargo" placeholder="Ex: Product Owner"/></div>
+        <div class="field"><label>Nome completo</label><input id="nome" placeholder="Ex: Ana Silva"/></div>
+        <div class="field"><label>Cargo principal</label><input id="cargo" placeholder="Ex: Product Manager"/></div>
       </div>
       <div class="row2">
-        <div class="field"><label>Empresa</label><input id="exp-empresa" placeholder="Ex: Empresa S.A."/></div>
-        <div class="field"><label>Contexto</label><input id="exp-contexto" placeholder="Ex: Fintech · Híbrido"/></div>
-      </div>
-      <div class="field"><label>Descrição</label><textarea id="exp-desc" placeholder="O que você fez e entregou nessa experiência..."></textarea></div>
-      <div class="add-form-actions">
-        <button class="btn-save" onclick="saveExp()">Salvar</button>
-        <button class="btn-cancel" onclick="toggle('exp-form')">Cancelar</button>
+        <div class="field"><label>Cidade / Estado</label><input id="cidade" placeholder="Ex: São Paulo, SP"/></div>
+        <div class="field"><label>LinkedIn (URL)</label><input id="linkedin" placeholder="https://linkedin.com/in/seu-perfil"/></div>
       </div>
     </div>
-  </div>
-
-  <div class="nav-footer">
-    <button class="btn-prev" onclick="navTo(1)">← Anterior</button>
-    <span class="step-info">Passo 2 de 6</span>
-    <button class="btn-next" onclick="navTo(3)">Próximo →</button>
-  </div>
-</div>
-
-<!-- STEP 3: CASES -->
-<div class="step" id="step3">
-  <div class="form-card">
-    <div class="card-title">Cases e projetos</div>
-    <div class="item-list" id="case-list"></div>
-    <button class="btn-add-item" onclick="toggle('case-form')">+ Adicionar case</button>
-    <div class="add-form" id="case-form">
-      <div class="row2">
-        <div class="field"><label>Título do case</label><input id="case-titulo" placeholder="Ex: Esteira de Crédito"/></div>
-        <div class="field"><label>Empresa · Período</label><input id="case-co" placeholder="Ex: Empresa · 2024–2025"/></div>
-      </div>
-      <div class="field"><label>Status</label>
-        <select id="case-status">
-          <option>Em produção</option><option>Entregue</option><option>Em andamento</option><option>Em idealização</option><option>Projeto global</option>
-        </select>
-      </div>
+    <div class="form-card">
+      <div class="card-title">Textos do hero</div>
+      <div class="field"><label>Tagline principal</label><input id="tagline" placeholder="Ex: Construindo produtos com impacto real na vida das pessoas"/></div>
+      <div class="field"><label>Especialidades</label><input id="especialidades" placeholder="Ex: PM · PO · Crédito · Pagamentos · Banking · Tecnologia"/></div>
+      <div class="field"><label>Descrição do hero</label><textarea id="hero_desc" placeholder="Seu diferencial em 2-3 linhas..."></textarea></div>
+    </div>
+    <div class="form-card">
+      <div class="card-title">Seção Sobre</div>
+      <div class="field"><label>Subtítulo da seção</label><input id="sobre_titulo" placeholder="Ex: PM que entende produto por dentro"/></div>
+    </div>
+    <div class="form-card">
+      <div class="card-title">Tema de cores</div>
       <div class="field">
-        <label>Entregas e descrição</label>
-        <textarea id="case-desc" placeholder="Separe cada entrega com ponto e vírgula (;)&#10;Ex: Fluxo de onboarding PJ; Integração com KYC; Conformidade LGPD e PCI-DSS"></textarea>
-        <div class="hint">Cada item separado por ; vira um bullet na lista</div>
+        <label>Escolha a cor de destaque</label>
+        <div class="color-row" id="paletas">
+          <div class="color-opt sel" data-pal="gold" style="background:#c9973a" title="Dourado"></div>
+          <div class="color-opt" data-pal="blue" style="background:#2563eb" title="Azul"></div>
+          <div class="color-opt" data-pal="teal" style="background:#0d9488" title="Verde-azulado"></div>
+          <div class="color-opt" data-pal="purple" style="background:#7c3aed" title="Roxo"></div>
+          <div class="color-opt" data-pal="red" style="background:#dc2626" title="Vermelho"></div>
+          <div class="color-opt" data-pal="pink" style="background:#db2777" title="Rosa"></div>
+        </div>
+        <div class="hint">Cor de destaque usada em títulos, botões e elementos visuais</div>
       </div>
-      <div class="field"><label>Tags (separadas por vírgula)</label><input id="case-tags" placeholder="Ex: Scrum, Jira, Crédito PJ, LGPD, KYC"/></div>
-      <div class="add-form-actions">
-        <button class="btn-save" onclick="saveCase()">Salvar</button>
-        <button class="btn-cancel" onclick="toggle('case-form')">Cancelar</button>
-      </div>
+    </div>
+    <div class="nav-footer">
+      <span class="step-info">Passo 1 de 6</span>
+      <button class="btn-next" onclick="navTo(2)">Próximo →</button>
     </div>
   </div>
 
-  <div class="nav-footer">
-    <button class="btn-prev" onclick="navTo(2)">← Anterior</button>
-    <span class="step-info">Passo 3 de 6</span>
-    <button class="btn-next" onclick="navTo(4)">Próximo →</button>
-  </div>
-</div>
-
-<!-- STEP 4: SKILLS -->
-<div class="step" id="step4">
-  <div class="form-card">
-    <div class="card-title">Grupos de competências</div>
-    <div class="item-list" id="skill-list"></div>
-    <button class="btn-add-item" onclick="toggle('skill-form')">+ Adicionar grupo</button>
-    <div class="add-form" id="skill-form">
-      <div class="field"><label>Nome do grupo</label><input id="sk-grupo" placeholder="Ex: Produto, Crédito & Finanças, Ferramentas..."/></div>
+  <div class="step" id="step2">
+    <div class="form-card">
+      <div class="card-title">Texto da seção Sobre</div>
       <div class="field">
-        <label>Skills do grupo (separadas por vírgula)</label>
-        <textarea id="sk-items" placeholder="Ex: Backlog, Roadmap, OKRs, Discovery, Delivery, Métricas de Produto"></textarea>
+        <label>Conte sua trajetória em parágrafos</label>
+        <textarea id="sobre_texto" style="min-height:150px" placeholder="Separe parágrafos com linha em branco."></textarea>
+        <div class="hint">Cada bloco separado por linha em branco vira um parágrafo</div>
       </div>
-      <div class="add-form-actions">
-        <button class="btn-save" onclick="saveSkill()">Salvar</button>
-        <button class="btn-cancel" onclick="toggle('skill-form')">Cancelar</button>
+    </div>
+    <div class="form-card">
+      <div class="card-title">Timeline de experiências</div>
+      <div class="item-list" id="exp-list"></div>
+      <button class="btn-add-item" onclick="toggle('exp-form')">+ Adicionar experiência</button>
+      <div class="add-form" id="exp-form">
+        <div class="row2">
+          <div class="field"><label>Período</label><input id="exp-periodo" placeholder="Ex: 2024 / Atual"/></div>
+          <div class="field"><label>Cargo</label><input id="exp-cargo" placeholder="Ex: Product Owner"/></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Empresa</label><input id="exp-empresa" placeholder="Ex: Empresa S.A."/></div>
+          <div class="field"><label>Contexto</label><input id="exp-contexto" placeholder="Ex: Fintech · Híbrido"/></div>
+        </div>
+        <div class="field"><label>Descrição</label><textarea id="exp-desc" placeholder="O que você fez e entregou..."></textarea></div>
+        <div class="add-form-actions">
+          <button class="btn-save" onclick="saveExp()">Salvar</button>
+          <button class="btn-cancel" onclick="toggle('exp-form')">Cancelar</button>
+        </div>
       </div>
+    </div>
+    <div class="nav-footer">
+      <button class="btn-prev" onclick="navTo(1)">← Anterior</button>
+      <span class="step-info">Passo 2 de 6</span>
+      <button class="btn-next" onclick="navTo(3)">Próximo →</button>
     </div>
   </div>
 
-  <div class="nav-footer">
-    <button class="btn-prev" onclick="navTo(3)">← Anterior</button>
-    <span class="step-info">Passo 4 de 6</span>
-    <button class="btn-next" onclick="navTo(5)">Próximo →</button>
-  </div>
-</div>
-
-<!-- STEP 5: FORMAÇÃO -->
-<div class="step" id="step5">
-  <div class="form-card">
-    <div class="card-title">Formação e certificações</div>
-    <div class="item-list" id="form-list"></div>
-    <button class="btn-add-item" onclick="toggle('form-form')">+ Adicionar formação</button>
-    <div class="add-form" id="form-form">
-      <div class="row2">
-        <div class="field"><label>Ano / Período</label><input id="fm-ano" placeholder="Ex: 2025"/></div>
-        <div class="field"><label>Instituição</label><input id="fm-inst" placeholder="Ex: PM3, Udemy, SENAI..."/></div>
+  <div class="step" id="step3">
+    <div class="form-card">
+      <div class="card-title">Cases e projetos</div>
+      <div class="item-list" id="case-list"></div>
+      <button class="btn-add-item" onclick="toggle('case-form')">+ Adicionar case</button>
+      <div class="add-form" id="case-form">
+        <div class="row2">
+          <div class="field"><label>Título</label><input id="case-titulo" placeholder="Ex: Esteira de Crédito"/></div>
+          <div class="field"><label>Empresa · Período</label><input id="case-co" placeholder="Ex: Empresa · 2024–2025"/></div>
+        </div>
+        <div class="field"><label>Status</label>
+          <select id="case-status"><option>Em produção</option><option>Entregue</option><option>Em andamento</option><option>Em idealização</option><option>Projeto global</option></select>
+        </div>
+        <div class="field"><label>Entregas (separe por ponto e vírgula)</label><textarea id="case-desc" placeholder="Ex: Fluxo de onboarding PJ; Integração KYC; Conformidade LGPD"></textarea></div>
+        <div class="field"><label>Tags (separadas por vírgula)</label><input id="case-tags" placeholder="Ex: Scrum, Jira, Crédito PJ, LGPD"/></div>
+        <div class="add-form-actions">
+          <button class="btn-save" onclick="saveCase()">Salvar</button>
+          <button class="btn-cancel" onclick="toggle('case-form')">Cancelar</button>
+        </div>
       </div>
-      <div class="field"><label>Curso / Título</label><input id="fm-titulo" placeholder="Ex: Product Management"/></div>
-      <div class="field"><label>Descrição curta (opcional)</label><input id="fm-desc" placeholder="Ex: Discovery, métricas, experimentação A/B..."/></div>
-      <div class="add-form-actions">
-        <button class="btn-save" onclick="saveForm()">Salvar</button>
-        <button class="btn-cancel" onclick="toggle('form-form')">Cancelar</button>
-      </div>
+    </div>
+    <div class="nav-footer">
+      <button class="btn-prev" onclick="navTo(2)">← Anterior</button>
+      <span class="step-info">Passo 3 de 6</span>
+      <button class="btn-next" onclick="navTo(4)">Próximo →</button>
     </div>
   </div>
 
-  <div class="nav-footer">
-    <button class="btn-prev" onclick="navTo(4)">← Anterior</button>
-    <span class="step-info">Passo 5 de 6</span>
-    <button class="btn-next" onclick="navTo(6)">Próximo →</button>
-  </div>
-</div>
-
-<!-- STEP 6: DEPOIMENTOS -->
-<div class="step" id="step6">
-  <div class="form-card">
-    <div class="card-title">Depoimentos</div>
-    <div class="item-list" id="dep-list"></div>
-    <button class="btn-add-item" onclick="toggle('dep-form')">+ Adicionar depoimento</button>
-    <div class="add-form" id="dep-form">
-      <div class="row2">
-        <div class="field"><label>Nome</label><input id="dep-nome" placeholder="Ex: Maria Souza"/></div>
-        <div class="field"><label>Cargo · Empresa</label><input id="dep-role" placeholder="Ex: Gerente de Produto · Empresa"/></div>
+  <div class="step" id="step4">
+    <div class="form-card">
+      <div class="card-title">Grupos de competências</div>
+      <div class="item-list" id="skill-list"></div>
+      <button class="btn-add-item" onclick="toggle('skill-form')">+ Adicionar grupo</button>
+      <div class="add-form" id="skill-form">
+        <div class="field"><label>Nome do grupo</label><input id="sk-grupo" placeholder="Ex: Produto, Crédito e Finanças, Ferramentas..."/></div>
+        <div class="field"><label>Skills (separadas por vírgula)</label><textarea id="sk-items" placeholder="Ex: Backlog, Roadmap, OKRs, Discovery, Delivery"></textarea></div>
+        <div class="add-form-actions">
+          <button class="btn-save" onclick="saveSkill()">Salvar</button>
+          <button class="btn-cancel" onclick="toggle('skill-form')">Cancelar</button>
+        </div>
       </div>
-      <div class="field"><label>Depoimento</label><textarea id="dep-texto" style="min-height:100px" placeholder="Texto do depoimento..."></textarea></div>
-      <div class="add-form-actions">
-        <button class="btn-save" onclick="saveDep()">Salvar</button>
-        <button class="btn-cancel" onclick="toggle('dep-form')">Cancelar</button>
-      </div>
+    </div>
+    <div class="nav-footer">
+      <button class="btn-prev" onclick="navTo(3)">← Anterior</button>
+      <span class="step-info">Passo 4 de 6</span>
+      <button class="btn-next" onclick="navTo(5)">Próximo →</button>
     </div>
   </div>
 
-  <div class="nav-footer">
-    <button class="btn-prev" onclick="navTo(5)">← Anterior</button>
-    <span class="step-info">Passo 6 de 6</span>
-    <button class="btn-generate" onclick="generate()">⬇ Gerar e baixar portfólio</button>
+  <div class="step" id="step5">
+    <div class="form-card">
+      <div class="card-title">Formação e certificações</div>
+      <div class="item-list" id="form-list"></div>
+      <button class="btn-add-item" onclick="toggle('form-form')">+ Adicionar formação</button>
+      <div class="add-form" id="form-form">
+        <div class="row2">
+          <div class="field"><label>Ano / Período</label><input id="fm-ano" placeholder="Ex: 2025"/></div>
+          <div class="field"><label>Instituição</label><input id="fm-inst" placeholder="Ex: PM3, Udemy, SENAI..."/></div>
+        </div>
+        <div class="field"><label>Curso / Título</label><input id="fm-titulo" placeholder="Ex: Product Management"/></div>
+        <div class="field"><label>Descrição curta (opcional)</label><input id="fm-desc" placeholder="Ex: Discovery, métricas, experimentação A/B..."/></div>
+        <div class="add-form-actions">
+          <button class="btn-save" onclick="saveForm()">Salvar</button>
+          <button class="btn-cancel" onclick="toggle('form-form')">Cancelar</button>
+        </div>
+      </div>
+    </div>
+    <div class="nav-footer">
+      <button class="btn-prev" onclick="navTo(4)">← Anterior</button>
+      <span class="step-info">Passo 5 de 6</span>
+      <button class="btn-next" onclick="navTo(6)">Próximo →</button>
+    </div>
+  </div>
+
+  <div class="step" id="step6">
+    <div class="form-card">
+      <div class="card-title">Depoimentos</div>
+      <div class="item-list" id="dep-list"></div>
+      <button class="btn-add-item" onclick="toggle('dep-form')">+ Adicionar depoimento</button>
+      <div class="add-form" id="dep-form">
+        <div class="row2">
+          <div class="field"><label>Nome</label><input id="dep-nome" placeholder="Ex: Maria Souza"/></div>
+          <div class="field"><label>Cargo · Empresa</label><input id="dep-role" placeholder="Ex: Gerente de Produto · Empresa"/></div>
+        </div>
+        <div class="field"><label>Depoimento</label><textarea id="dep-texto" style="min-height:90px" placeholder="Texto do depoimento..."></textarea></div>
+        <div class="add-form-actions">
+          <button class="btn-save" onclick="saveDep()">Salvar</button>
+          <button class="btn-cancel" onclick="toggle('dep-form')">Cancelar</button>
+        </div>
+      </div>
+    </div>
+    <div class="nav-footer">
+      <button class="btn-prev" onclick="navTo(5)">← Anterior</button>
+      <span class="step-info">Passo 6 de 6</span>
+      <button class="btn-generate" onclick="generate()">⬇ Gerar e baixar portfólio</button>
+    </div>
   </div>
 </div>
 
-<!-- TUTORIAL -->
-<div id="tutorial">
+<div id="screen-tutorial">
   <div class="tut-success">
     <div class="tut-success-icon">✓</div>
     <div>
-      <h2>Portfólio gerado!</h2>
-      <p>O download do <strong>index.html</strong> começou automaticamente. Agora siga os passos abaixo para publicar online de graça.</p>
+      <h2>Portfólio gerado com sucesso!</h2>
+      <p>O download do <strong>index.html</strong> começou automaticamente. Siga os passos abaixo para publicar online de graça.</p>
     </div>
   </div>
-
   <div class="tut-steps">
-
-    <div class="tut-step">
-      <div class="tut-vline"></div>
-      <div class="tut-num done">✓</div>
-      <div class="tut-body">
-        <div class="tut-step-title">Você já tem o arquivo</div>
-        <div class="tut-step-desc">O <strong>index.html</strong> foi baixado automaticamente. Esse arquivo é o seu portfólio completo — guarde-o em uma pasta fácil de achar.</div>
-        <div class="tut-warn">⚠ O arquivo precisa se chamar exatamente <strong>index.html</strong> para o GitHub Pages funcionar corretamente.</div>
-      </div>
-    </div>
-
-    <div class="tut-step">
-      <div class="tut-vline"></div>
-      <div class="tut-num">2</div>
-      <div class="tut-body">
-        <div class="tut-step-title">Crie uma conta no GitHub</div>
-        <div class="tut-step-desc">Acesse o GitHub e crie sua conta gratuita. Se já tiver conta, pule este passo.</div>
-        <div class="tut-code"><span>github.com</span><button class="btn-copy" onclick="openLink('https://github.com')">Abrir ↗</button></div>
-      </div>
-    </div>
-
-    <div class="tut-step">
-      <div class="tut-vline"></div>
-      <div class="tut-num">3</div>
-      <div class="tut-body">
-        <div class="tut-step-title">Crie um repositório novo</div>
-        <div class="tut-step-desc">Após entrar no GitHub, clique no botão <strong>+</strong> no canto superior direito → <strong>New repository</strong>. Dê um nome (ex: <code>portfolio</code>), deixe marcado como <strong>Public</strong> e clique em <strong>Create repository</strong>.</div>
-        <div class="tut-info">💡 Dica: use um nome simples como <strong>portfolio</strong> ou <strong>meu-portfolio</strong>. Ele vai aparecer na URL do seu site.</div>
-      </div>
-    </div>
-
-    <div class="tut-step">
-      <div class="tut-vline"></div>
-      <div class="tut-num">4</div>
-      <div class="tut-body">
-        <div class="tut-step-title">Faça upload do index.html</div>
-        <div class="tut-step-desc">Dentro do repositório criado, clique em <strong>Add file → Upload files</strong>. Arraste o arquivo <strong>index.html</strong> para a área de upload e clique em <strong>Commit changes</strong>.</div>
-        <div class="mock-upload">Arraste o index.html aqui ou clique para selecionar</div>
-        <div class="tut-warn">⚠ Não renomeie o arquivo. Ele precisa ser enviado como <strong>index.html</strong>.</div>
-      </div>
-    </div>
-
-    <div class="tut-step">
-      <div class="tut-num">5</div>
-      <div class="tut-body">
-        <div class="tut-step-title">Ative o GitHub Pages</div>
-        <div class="tut-step-desc">No repositório, clique em <strong>Settings</strong> (aba no topo) → no menu lateral clique em <strong>Pages</strong>. Em <strong>Branch</strong>, selecione <strong>main</strong> e clique em <strong>Save</strong>. Aguarde 1-2 minutos.</div>
-        <div class="tut-code" id="pages-url"><span>github.com/SEU-USUARIO/SEU-REPOSITORIO/settings/pages</span></div>
-        <div class="tut-info">💡 Troque SEU-USUARIO e SEU-REPOSITORIO pelo seu usuário e nome do repositório no GitHub.</div>
-      </div>
-    </div>
-
+    <div class="tut-step"><div class="tut-vline"></div><div class="tut-num done">✓</div><div class="tut-body">
+      <div class="tut-step-title">Arquivo baixado</div>
+      <div class="tut-step-desc">O <strong>index.html</strong> foi baixado automaticamente. Guarde em local fácil de encontrar.</div>
+      <div class="tut-warn">⚠ O arquivo precisa se chamar exatamente <strong>index.html</strong> para o GitHub Pages funcionar.</div>
+    </div></div>
+    <div class="tut-step"><div class="tut-vline"></div><div class="tut-num">2</div><div class="tut-body">
+      <div class="tut-step-title">Crie uma conta no GitHub</div>
+      <div class="tut-step-desc">Acesse e crie sua conta gratuita. Se já tiver conta, pule este passo.</div>
+      <div class="tut-code"><span>github.com</span><button class="btn-copy" onclick="window.open('https://github.com','_blank')">Abrir ↗</button></div>
+    </div></div>
+    <div class="tut-step"><div class="tut-vline"></div><div class="tut-num">3</div><div class="tut-body">
+      <div class="tut-step-title">Crie um repositório novo</div>
+      <div class="tut-step-desc">Clique no <strong>+</strong> no canto superior direito → <strong>New repository</strong>. Escolha um nome (ex: <code>portfolio</code>), marque como <strong>Public</strong> e clique em <strong>Create repository</strong>.</div>
+      <div class="tut-info">💡 Use um nome simples como <strong>portfolio</strong> — ele aparece na URL do seu site.</div>
+    </div></div>
+    <div class="tut-step"><div class="tut-vline"></div><div class="tut-num">4</div><div class="tut-body">
+      <div class="tut-step-title">Faça upload do index.html</div>
+      <div class="tut-step-desc">Dentro do repositório, clique em <strong>Add file → Upload files</strong>. Arraste o <strong>index.html</strong> e clique em <strong>Commit changes</strong>.</div>
+      <div class="tut-warn">⚠ Não renomeie o arquivo. Suba como <strong>index.html</strong>.</div>
+    </div></div>
+    <div class="tut-step"><div class="tut-num">5</div><div class="tut-body">
+      <div class="tut-step-title">Ative o GitHub Pages</div>
+      <div class="tut-step-desc">No repositório, clique em <strong>Settings → Pages</strong> no menu lateral. Em <strong>Branch</strong>, selecione <strong>main</strong> e clique em <strong>Save</strong>. Aguarde 1-2 minutos.</div>
+      <div class="tut-info">💡 Após ativar, seu portfólio fica em: <strong>SEU-USUARIO.github.io/SEU-REPOSITORIO/</strong></div>
+    </div></div>
   </div>
-
   <div class="tut-final">
-    <h3>Portfólio no ar! 🎉</h3>
-    <p>Após ativar o GitHub Pages, seu portfólio ficará disponível neste endereço:</p>
+    <h3>Portfólio no ar!</h3>
+    <p>Seu link ficará nesse formato:</p>
     <div class="tut-url">https://SEU-USUARIO.github.io/SEU-REPOSITORIO/</div>
     <div class="checklist">
-      <div class="check-item"><span class="ok">✓</span> Gratuito para sempre</div>
-      <div class="check-item"><span class="ok">✓</span> HTTPS automático — link seguro</div>
-      <div class="check-item"><span class="ok">✓</span> Para atualizar: suba um novo index.html</div>
-      <div class="check-item"><span class="ok">✓</span> Adicione o link no LinkedIn em "Destaque"</div>
+      <div class="check-item"><span class="check-ok">✓</span> Gratuito para sempre</div>
+      <div class="check-item"><span class="check-ok">✓</span> HTTPS automático — link seguro</div>
+      <div class="check-item"><span class="check-ok">✓</span> Para atualizar: suba um novo index.html</div>
+      <div class="check-item"><span class="check-ok">✓</span> Adicione o link no LinkedIn em "Destaque"</div>
     </div>
     <button class="btn-restart" onclick="restart()">← Gerar outro portfólio</button>
   </div>
 </div>
 
 </main>
-
 <script>
-const TOTAL = 6;
-let cur = 1;
-const state = {exps:[],cases:[],skills:[],forms:[],deps:[],pal:'gold'};
-const pals = {
+const TOTAL=6;let cur=1;
+const state={exps:[],cases:[],skills:[],forms:[],deps:[],pal:'gold'};
+const pals={
   gold:{a:'#c9973a',b:'#e2b96a',c:'#f5dfa5',bg:'#0e0e13',bg2:'#16161e',muted:'#7a7a8c',card:'#18181f',border:'#2a2a38'},
   blue:{a:'#2563eb',b:'#60a5fa',c:'#bfdbfe',bg:'#0a0f1e',bg2:'#0f1729',muted:'#6b7280',card:'#111827',border:'#1e2d4a'},
   teal:{a:'#0d9488',b:'#2dd4bf',c:'#99f6e4',bg:'#042f2e',bg2:'#0a3d3c',muted:'#6b8585',card:'#0f3534',border:'#164e4d'},
@@ -457,343 +434,120 @@ const pals = {
   pink:{a:'#db2777',b:'#f472b6',c:'#fbcfe8',bg:'#1a0011',bg2:'#250718',muted:'#8a5070',card:'#200015',border:'#4a1035'}
 };
 
-document.querySelectorAll('.color-opt').forEach(el=>{
-  el.onclick=()=>{
-    document.querySelectorAll('.color-opt').forEach(x=>x.classList.remove('sel'));
-    el.classList.add('sel');
-    state.pal=el.dataset.pal;
-  };
-});
-
-function navTo(n){
-  document.getElementById('step'+cur).classList.remove('active');
-  cur=n;
-  document.getElementById('step'+cur).classList.add('active');
-  updateProg();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function jumpTo(n){
-  if(n===cur)return;
-  navTo(n);
-}
-
-function updateProg(){
-  document.querySelectorAll('.prog-seg').forEach((el,i)=>{
-    el.classList.remove('active','done');
-    if(i+1===cur)el.classList.add('active');
-    else if(i+1<cur)el.classList.add('done');
-  });
-}
-
-function toggle(id){
-  const f=document.getElementById(id);
-  f.classList.toggle('open');
-}
-
+function show(id){['screen-upload','screen-loading','screen-form','screen-tutorial'].forEach(s=>document.getElementById(s).style.display='none');document.getElementById(id).style.display='block';window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('.color-opt').forEach(el=>{el.onclick=()=>{document.querySelectorAll('.color-opt').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');state.pal=el.dataset.pal;};});
+function navTo(n){document.getElementById('step'+cur).classList.remove('active');cur=n;document.getElementById('step'+cur).classList.add('active');updateProg();window.scrollTo({top:0,behavior:'smooth'});}
+function jumpTo(n){if(n===cur)return;navTo(n);}
+function updateProg(){document.querySelectorAll('.prog-seg').forEach((el,i)=>{el.classList.remove('active','done');if(i+1===cur)el.classList.add('active');else if(i+1<cur)el.classList.add('done');});}
+function toggle(id){document.getElementById(id).classList.toggle('open');}
 function v(id){return(document.getElementById(id)?.value||'').trim();}
+function set(id,val){const el=document.getElementById(id);if(el)el.value=val||'';}
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
-function renderList(listId,items,f1,f2){
-  const el=document.getElementById(listId);
-  el.innerHTML='';
-  items.forEach((item,i)=>{
-    const d=document.createElement('div');d.className='item-card';
-    d.innerHTML=`<div class="item-card-body"><div class="item-card-title">${esc(item[f1]||'—')}</div><div class="item-card-sub">${esc(item[f2]||'')}</div></div><button class="btn-rm" onclick="removeItem('${listId}',${i})" aria-label="Remover">×</button>`;
-    el.appendChild(d);
-  });
-}
-
 const listMap={'exp-list':['exps','cargo','empresa'],'case-list':['cases','titulo','co'],'skill-list':['skills','grupo','items'],'form-list':['forms','titulo','inst'],'dep-list':['deps','nome','role']};
-function removeItem(lid,i){const[k,f1,f2]=listMap[lid];state[k].splice(i,1);renderList(lid,state[k],f1,f2);}
+function renderList(lid){const[k,f1,f2]=listMap[lid];const el=document.getElementById(lid);el.innerHTML='';state[k].forEach((item,i)=>{const d=document.createElement('div');d.className='item-card';d.innerHTML='<div class="item-card-body"><div class="item-card-title">'+esc(item[f1]||'—')+'</div><div class="item-card-sub">'+esc(item[f2]||'')+'</div></div><button class="btn-rm" onclick="removeItem(\''+lid+'\','+i+')">×</button>';el.appendChild(d);});}
+function removeItem(lid,i){const[k]=listMap[lid];state[k].splice(i,1);renderList(lid);}
+function saveExp(){const p=v('exp-periodo'),c=v('exp-cargo'),e=v('exp-empresa'),ctx=v('exp-contexto'),d=v('exp-desc');if(!c||!e)return;state.exps.push({periodo:p,cargo:c,empresa:e,contexto:ctx,desc:d});renderList('exp-list');['exp-periodo','exp-cargo','exp-empresa','exp-contexto','exp-desc'].forEach(id=>set(id,''));document.getElementById('exp-form').classList.remove('open');}
+function saveCase(){const t=v('case-titulo'),co=v('case-co'),s=v('case-status'),d=v('case-desc'),tg=v('case-tags');if(!t)return;state.cases.push({titulo:t,co,status:s,desc:d,tags:tg});renderList('case-list');['case-titulo','case-co','case-desc','case-tags'].forEach(id=>set(id,''));document.getElementById('case-form').classList.remove('open');}
+function saveSkill(){const g=v('sk-grupo'),i=v('sk-items');if(!g||!i)return;state.skills.push({grupo:g,items:i});renderList('skill-list');['sk-grupo','sk-items'].forEach(id=>set(id,''));document.getElementById('skill-form').classList.remove('open');}
+function saveForm(){const a=v('fm-ano'),i=v('fm-inst'),t=v('fm-titulo'),d=v('fm-desc');if(!t)return;state.forms.push({ano:a,inst:i,titulo:t,desc:d});renderList('form-list');['fm-ano','fm-inst','fm-titulo','fm-desc'].forEach(id=>set(id,''));document.getElementById('form-form').classList.remove('open');}
+function saveDep(){const n=v('dep-nome'),r=v('dep-role'),t=v('dep-texto');if(!n||!t)return;state.deps.push({nome:n,role:r,texto:t});renderList('dep-list');['dep-nome','dep-role','dep-texto'].forEach(id=>set(id,''));document.getElementById('dep-form').classList.remove('open');}
 
-function saveExp(){
-  const p=v('exp-periodo'),c=v('exp-cargo'),e=v('exp-empresa'),ctx=v('exp-contexto'),d=v('exp-desc');
-  if(!c||!e)return;
-  state.exps.push({periodo:p,cargo:c,empresa:e,contexto:ctx,desc:d});
-  renderList('exp-list',state.exps,'cargo','empresa');
-  ['exp-periodo','exp-cargo','exp-empresa','exp-contexto','exp-desc'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('exp-form').classList.remove('open');
-}
-function saveCase(){
-  const t=v('case-titulo'),co=v('case-co'),s=v('case-status'),d=v('case-desc'),tg=v('case-tags');
-  if(!t)return;
-  state.cases.push({titulo:t,co,status:s,desc:d,tags:tg});
-  renderList('case-list',state.cases,'titulo','co');
-  ['case-titulo','case-co','case-desc','case-tags'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('case-form').classList.remove('open');
-}
-function saveSkill(){
-  const g=v('sk-grupo'),i=v('sk-items');
-  if(!g||!i)return;
-  state.skills.push({grupo:g,items:i});
-  renderList('skill-list',state.skills,'grupo','items');
-  ['sk-grupo','sk-items'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('skill-form').classList.remove('open');
-}
-function saveForm(){
-  const a=v('fm-ano'),i=v('fm-inst'),t=v('fm-titulo'),d=v('fm-desc');
-  if(!t)return;
-  state.forms.push({ano:a,inst:i,titulo:t,desc:d});
-  renderList('form-list',state.forms,'titulo','inst');
-  ['fm-ano','fm-inst','fm-titulo','fm-desc'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('form-form').classList.remove('open');
-}
-function saveDep(){
-  const n=v('dep-nome'),r=v('dep-role'),t=v('dep-texto');
-  if(!n||!t)return;
-  state.deps.push({nome:n,role:r,texto:t});
-  renderList('dep-list',state.deps,'nome','role');
-  ['dep-nome','dep-role','dep-texto'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('dep-form').classList.remove('open');
+async function handleFile(input,type){
+  const file=input.files[0];if(!file)return;
+  show('screen-loading');
+  try{
+    let jsonText='';
+    if(type==='pdf'){
+      document.getElementById('loading-msg').innerHTML='Lendo o PDF do LinkedIn...<br>Extraindo nome, cargo e experiências.';
+      const base64=await fileToBase64(file);
+      jsonText=await extractWithClaude(base64,file.type);
+    }else{
+      document.getElementById('loading-msg').innerHTML='Lendo o arquivo ZIP do LinkedIn...<br>Processando dados de experiência e formação.';
+      const csvText=await readZip(file);
+      jsonText=await extractFromText(csvText);
+    }
+    fillForm(jsonText);
+    document.getElementById('ai-banner').style.display='flex';
+    showForm(true);
+  }catch(err){
+    console.error(err);
+    alert('Não foi possível ler o arquivo automaticamente.\nTente o outro formato ou preencha manualmente.');
+    show('screen-upload');
+  }
 }
 
-function openLink(url){window.open(url,'_blank');}
+function fileToBase64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=()=>rej(new Error('Erro ao ler'));r.readAsDataURL(file);});}
+
+async function readZip(file){
+  const buf=await file.arrayBuffer();const bytes=new Uint8Array(buf);
+  let text='';for(let i=0;i<bytes.length;i++){const c=bytes[i];if(c>=32&&c<127)text+=String.fromCharCode(c);else if(c===10||c===13)text+='\n';}
+  return text.split('\n').filter(l=>l.length>5&&(l.includes(',')||l.includes('"'))).slice(0,300).join('\n');
+}
+
+const PROMPT_BASE=`Extraia as informações do perfil/CV do LinkedIn e retorne APENAS um JSON válido, sem markdown, sem explicações, sem texto antes ou depois:
+{"nome":"","cargo":"","cidade":"","linkedin":"","tagline":"Frase inspiradora sobre o profissional","especialidades":"Área1 · Área2 · Área3","hero_desc":"Parágrafo curto e poderoso sobre o diferencial","sobre_titulo":"Título criativo para seção sobre","sobre_texto":"Narrativa em 3-4 parágrafos separados por linha em branco, cada um sobre uma fase/empresa da carreira","experiencias":[{"periodo":"2024 / Atual","cargo":"","empresa":"","contexto":"Segmento · Modalidade","desc":"O que fez e entregou"}],"formacoes":[{"ano":"","inst":"","titulo":"","desc":""}],"skills":[{"grupo":"Nome do grupo","items":"skill1, skill2, skill3"}]}
+Regras: tagline inspiradora; sobre_texto narrativo e fluido; especialidades com · entre elas; mínimo 3 grupos de skills; se dado não disponível use string vazia.`;
+
+async function extractWithClaude(base64,mimeType){
+  const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:2000,messages:[{role:'user',content:[{type:'document',source:{type:'base64',media_type:mimeType||'application/pdf',data:base64}},{type:'text',text:PROMPT_BASE}]}]})});
+  if(!res.ok)throw new Error('API '+res.status);
+  const data=await res.json();
+  return data.content.filter(c=>c.type==='text').map(c=>c.text).join('');
+}
+
+async function extractFromText(csvText){
+  const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:2000,messages:[{role:'user',content:PROMPT_BASE+'\n\nDados do LinkedIn:\n'+csvText.substring(0,8000)}]})});
+  if(!res.ok)throw new Error('API '+res.status);
+  const data=await res.json();
+  return data.content.filter(c=>c.type==='text').map(c=>c.text).join('');
+}
+
+function fillForm(jsonText){
+  try{
+    const d=JSON.parse(jsonText.replace(/```json|```/g,'').trim());
+    set('nome',d.nome);set('cargo',d.cargo);set('cidade',d.cidade);set('linkedin',d.linkedin);
+    set('tagline',d.tagline);set('especialidades',d.especialidades);set('hero_desc',d.hero_desc);
+    set('sobre_titulo',d.sobre_titulo);set('sobre_texto',d.sobre_texto);
+    state.exps=[];(d.experiencias||[]).forEach(e=>state.exps.push({periodo:e.periodo||'',cargo:e.cargo||'',empresa:e.empresa||'',contexto:e.contexto||'',desc:e.desc||''}));renderList('exp-list');
+    state.forms=[];(d.formacoes||[]).forEach(f=>state.forms.push({ano:f.ano||'',inst:f.inst||'',titulo:f.titulo||'',desc:f.desc||''}));renderList('form-list');
+    state.skills=[];(d.skills||[]).forEach(s=>state.skills.push({grupo:s.grupo||'',items:s.items||''}));renderList('skill-list');
+  }catch(e){console.warn('Parse error:',e);}
+}
+
+function showForm(fromAI){show('screen-form');if(fromAI)document.getElementById('ai-banner').style.display='flex';}
 
 function restart(){
-  document.getElementById('tutorial').classList.remove('active');
-  document.getElementById('tutorial').style.display='none';
-  document.getElementById('progBar').style.display='flex';
-  navTo(1);
+  state.exps=[];state.cases=[];state.skills=[];state.forms=[];state.deps=[];
+  ['nome','cargo','cidade','linkedin','tagline','especialidades','hero_desc','sobre_titulo','sobre_texto'].forEach(id=>set(id,''));
+  ['exp-list','case-list','skill-list','form-list','dep-list'].forEach(id=>document.getElementById(id).innerHTML='');
+  document.getElementById('ai-banner').style.display='none';
+  cur=1;document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('step1').classList.add('active');updateProg();show('screen-upload');
 }
 
 function generate(){
   const p=pals[state.pal];
-  const nome=esc(v('nome')||'Seu Nome');
-  const cargo=esc(v('cargo')||'Product Manager');
-  const cidade=esc(v('cidade')||'São Paulo, SP');
-  const linkedin=v('linkedin')||'#';
-  const tagline=esc(v('tagline')||'Construindo produtos com impacto real');
+  const nome=esc(v('nome')||'Seu Nome'),cargo=esc(v('cargo')||'Product Manager'),cidade=esc(v('cidade')||'São Paulo, SP');
+  const linkedin=v('linkedin')||'#',tagline=esc(v('tagline')||'Construindo produtos com impacto real');
   const sobreTitulo=esc(v('sobre_titulo')||'Uma trajetória construída com propósito');
-  const especialidades=esc(v('especialidades')||'');
-  const heroDesc=esc(v('hero_desc')||'');
+  const especialidades=esc(v('especialidades')||''),heroDesc=esc(v('hero_desc')||'');
   const sobreTexto=v('sobre_texto')||'';
-  const nomeParts=(v('nome')||'Seu Nome').split(' ');
-  const primeiro=esc(nomeParts[0]);
-  const resto=esc(nomeParts.slice(1).join(' '));
+  const nomeArr=(v('nome')||'Seu Nome').split(' ');
+  const primeiro=esc(nomeArr[0]),resto=esc(nomeArr.slice(1).join(' '));
+  const sobreParas=sobreTexto.split(/\n\n+/).filter(x=>x.trim()).map(par=>'<p class="sobre-text reveal">'+esc(par.trim()).replace(/\n/g,'<br>')+'</p>').join('\n');
+  const tlHtml=state.exps.map(e=>'<div class="tl-item"><div class="tl-year">'+esc(e.periodo)+'</div><div class="tl-track"><div class="tl-dot"></div></div><div><div class="tl-role">'+esc(e.cargo)+' · '+esc(e.empresa)+'</div><div class="tl-co">'+esc(e.contexto)+'</div><div class="tl-desc">'+esc(e.desc)+'</div></div></div>').join('');
+  const casesHtml=state.cases.map((c,i)=>{const bullets=c.desc.split(';').filter(x=>x.trim()).map(b=>'<li>'+esc(b.trim())+'</li>').join('');const chips=c.tags.split(',').filter(x=>x.trim()).map(t=>'<span class="chip">'+esc(t.trim())+'</span>').join('');return '<div class="case-item"><div class="case-left"><div class="case-number">0'+(i+1)+'</div><div><div class="case-badge">'+esc(c.status)+'</div><div class="case-title">'+esc(c.titulo)+'</div><div class="case-co">'+esc(c.co)+'</div></div></div><div class="case-right"><ul class="case-bullets">'+bullets+'</ul><div class="case-chips">'+chips+'</div></div></div>';}).join('');
+  const skillsHtml=state.skills.map(s=>'<div class="sk-group"><div class="sk-group-label">'+esc(s.grupo)+'</div><div class="skills-chips">'+s.items.split(',').map(i=>'<span class="sk-chip">'+esc(i.trim())+'</span>').join('')+'</div></div>').join('');
+  const formsHtml=state.forms.map(f=>'<div class="form-row"><div class="form-y">'+esc(f.ano)+'</div><div class="form-t">'+esc(f.titulo)+(f.desc?' <small>· '+esc(f.desc)+'</small>':'')+'</div><div class="form-meta"><span class="form-inst">'+esc(f.inst)+'</span><span class="form-badge">Concluído</span></div></div>').join('');
+  const depsHtml=state.deps.map(d=>'<div class="dep-card"><p class="dep-q">'+esc(d.texto)+'</p><div class="dep-name">'+esc(d.nome)+'</div><div class="dep-role">'+esc(d.role)+'</div></div>').join('');
+  const initials=encodeURIComponent((v('nome')||'GP').substring(0,2).toUpperCase());
 
-  const sobreParas=sobreTexto.split(/\n\n+/).filter(x=>x.trim()).map(par=>`<p class="sobre-text reveal">${esc(par.trim()).replace(/\n/g,'<br>')}</p>`).join('\n');
-
-  const tlHtml=state.exps.map(e=>`
-    <div class="tl-item">
-      <div class="tl-year">${esc(e.periodo)}</div>
-      <div class="tl-track"><div class="tl-dot"></div></div>
-      <div>
-        <div class="tl-role">${esc(e.cargo)} · ${esc(e.empresa)}</div>
-        <div class="tl-co">${esc(e.contexto)}</div>
-        <div class="tl-desc">${esc(e.desc)}</div>
-      </div>
-    </div>`).join('');
-
-  const casesHtml=state.cases.map((c,i)=>{
-    const bullets=c.desc.split(';').filter(x=>x.trim()).map(b=>`<li>${esc(b.trim())}</li>`).join('');
-    const chips=c.tags.split(',').filter(x=>x.trim()).map(t=>`<span class="chip">${esc(t.trim())}</span>`).join('');
-    return `<div class="case-item">
-      <div class="case-left">
-        <div class="case-number">0${i+1}</div>
-        <div><div class="case-badge">${esc(c.status)}</div><div class="case-title">${esc(c.titulo)}</div><div class="case-co">${esc(c.co)}</div></div>
-      </div>
-      <div class="case-right">
-        <ul class="case-bullets">${bullets}</ul>
-        <div class="case-chips">${chips}</div>
-      </div>
-    </div>`;
-  }).join('');
-
-  const skillsHtml=state.skills.map(s=>`
-    <div class="sk-group">
-      <div class="sk-group-label">${esc(s.grupo)}</div>
-      <div class="skills-chips">${s.items.split(',').map(i=>`<span class="sk-chip">${esc(i.trim())}</span>`).join('')}</div>
-    </div>`).join('');
-
-  const formsHtml=state.forms.map(f=>`
-    <div class="form-row">
-      <div class="form-y">${esc(f.ano)}</div>
-      <div class="form-t">${esc(f.titulo)}${f.desc?` <small>· ${esc(f.desc)}</small>`:''}</div>
-      <div class="form-meta"><span class="form-inst">${esc(f.inst)}</span><span class="form-badge">Concluído</span></div>
-    </div>`).join('');
-
-  const depsHtml=state.deps.map(d=>`
-    <div class="dep-card">
-      <p class="dep-q">${esc(d.texto)}</p>
-      <div class="dep-name">${esc(d.nome)}</div>
-      <div class="dep-role">${esc(d.role)}</div>
-    </div>`).join('');
-
-  const html=`<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>${nome} · ${cargo}</title>
-<link rel="icon" href="https://ui-avatars.com/api/?name=${encodeURIComponent((v('nome')||'GP').substring(0,2).toUpperCase())}&background=${p.a.replace('#','')}&color=${p.bg.replace('#','')}&size=32" type="image/png">
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--gold:${p.a};--gold2:${p.b};--gold3:${p.c};--ink:${p.bg};--ink2:${p.bg2};--muted:${p.muted};--muted2:#b0b0c0;--cream:#f9f7f2;--border:${p.border};--border2:#38384a;--card:${p.card};--card2:#202028}
-html{scroll-behavior:smooth}
-body{background:var(--ink);color:var(--cream);font-family:'Inter',sans-serif;font-size:16px;line-height:1.65;overflow-x:hidden}
-::selection{background:var(--gold);color:var(--ink)}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--ink)}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.1rem 6vw;display:flex;align-items:center;justify-content:space-between;transition:background .4s,border-color .4s;border-bottom:1px solid transparent}
-nav.scrolled{background:rgba(14,14,19,.95);backdrop-filter:blur(20px);border-color:var(--border)}
-.logo{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;color:var(--cream)}.logo em{color:var(--gold);font-style:italic}
-.nav-links{display:flex;gap:2.5rem;list-style:none}.nav-links a{font-size:.82rem;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}.nav-links a:hover{color:var(--cream)}
-#hero{min-height:100vh;display:flex;align-items:center;padding:8rem 6vw 6rem;position:relative;overflow:hidden}
-.hero-noise{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 55% at 72% 38%,rgba(201,151,58,.07) 0%,transparent 65%)}
-.hero-line{position:absolute;left:6vw;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent 0%,var(--border2) 25%,var(--border2) 75%,transparent 100%);pointer-events:none}
-.hero-inner{max-width:840px;padding-left:2.5rem}
-.hero-label{display:inline-flex;align-items:center;gap:.6rem;font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem}
-.hero-label::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold);animation:glow 2.5s ease-in-out infinite}
-@keyframes glow{0%,100%{box-shadow:0 0 6px var(--gold)}50%{box-shadow:0 0 16px var(--gold2)}}
-h1{font-family:'Fraunces',serif;font-size:clamp(3rem,6vw,5.5rem);font-weight:600;line-height:1.04;letter-spacing:-.025em;margin-bottom:1.25rem}
-h1 em{font-style:italic;color:var(--gold2)}
-.hero-role{font-size:.92rem;color:var(--muted);margin-bottom:1.5rem}
-.hero-desc{font-size:1.05rem;color:var(--muted2);max-width:530px;margin-bottom:2.5rem;line-height:1.75;border-left:2px solid var(--border2);padding-left:1.25rem}
-.hero-desc strong{color:var(--cream);font-weight:500}
-.hero-ctas{display:flex;gap:1rem;flex-wrap:wrap}
-.cta-primary{background:var(--gold);color:var(--ink);padding:.7rem 1.8rem;border-radius:4px;font-size:.88rem;font-weight:600;text-decoration:none;transition:all .2s}.cta-primary:hover{background:var(--gold2);transform:translateY(-1px)}
-.cta-ghost{border:1px solid var(--border2);color:var(--muted2);padding:.7rem 1.8rem;border-radius:4px;font-size:.88rem;text-decoration:none;transition:all .2s}.cta-ghost:hover{border-color:var(--gold);color:var(--gold)}
-section{padding:7rem 6vw}.container{max-width:1060px;margin:0 auto}
-.section-header{margin-bottom:3.5rem}
-.section-eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:.75rem;margin-bottom:.8rem}.section-eyebrow::before{content:'';width:20px;height:1px;background:var(--gold)}
-.section-title{font-family:'Fraunces',serif;font-size:clamp(1.9rem,3.2vw,2.8rem);font-weight:600;line-height:1.1;letter-spacing:-.02em}.section-title em{font-style:italic;color:var(--gold2)}
-#sobre{background:var(--ink2)}.sobre-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:5rem;align-items:start}
-.sobre-text{color:var(--muted2);line-height:1.8;margin-bottom:1.1rem;font-size:.975rem}.sobre-text strong{color:var(--cream);font-weight:500}
-.tl{display:flex;flex-direction:column;gap:0}
-.tl-item{display:grid;grid-template-columns:72px 16px 1fr;gap:0 .75rem;padding-bottom:2rem;position:relative;opacity:0;transform:translateX(16px);transition:all .5s ease}.tl-item.visible{opacity:1;transform:translateX(0)}
-.tl-item:not(:last-child) .tl-track::after{content:'';position:absolute;top:22px;bottom:0;left:7px;width:1px;background:var(--border2)}
-.tl-track{position:relative;display:flex;justify-content:center;padding-top:4px}
-.tl-dot{width:14px;height:14px;border-radius:50%;background:var(--gold);border:2px solid var(--ink2);box-shadow:0 0 8px rgba(201,151,58,.4);flex-shrink:0;margin-top:2px}
-.tl-year{font-family:'Fraunces',serif;font-size:.8rem;color:var(--gold);font-weight:600;padding-top:.15rem;text-align:right;line-height:1.3}
-.tl-role{font-size:.95rem;font-weight:600;color:var(--cream);margin-bottom:.15rem}.tl-co{font-size:.8rem;color:var(--muted);margin-bottom:.4rem}.tl-desc{font-size:.865rem;color:var(--muted2);line-height:1.65}
-#cases{background:var(--ink)}
-.case-item{display:grid;grid-template-columns:1fr 2fr;border:1px solid var(--border);border-radius:6px;margin-bottom:1.25rem;overflow:hidden;opacity:0;transform:translateY(24px);transition:opacity .5s ease,transform .5s ease,border-color .25s}.case-item.visible{opacity:1;transform:translateY(0)}.case-item:hover{border-color:rgba(201,151,58,.35)}
-.case-left{background:var(--card);padding:2rem 1.75rem;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:space-between}
-.case-number{font-family:'Fraunces',serif;font-size:3rem;font-weight:600;color:var(--border2);line-height:1;margin-bottom:auto}
-.case-badge{display:inline-block;font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,151,58,.35);padding:.3rem .75rem;border-radius:3px;margin-bottom:.75rem}
-.case-title{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;color:var(--cream);line-height:1.25;margin-bottom:.3rem}.case-co{font-size:.8rem;color:var(--muted)}
-.case-right{background:var(--card2);padding:2rem}
-.case-bullets{list-style:none;display:flex;flex-direction:column;gap:.65rem;margin-bottom:1.5rem}
-.case-bullets li{font-size:.875rem;color:var(--muted2);line-height:1.6;padding-left:1.1rem;position:relative}.case-bullets li::before{content:'—';position:absolute;left:0;color:var(--gold);font-size:.75rem;top:.05rem}
-.case-chips{display:flex;flex-wrap:wrap;gap:.45rem}.chip{font-size:.72rem;color:var(--muted2);border:1px solid var(--border2);padding:.25rem .7rem;border-radius:3px}
-#skills{background:var(--ink2)}
-.skills-chips-wrap{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:2rem}
-.skills-chips-groups{display:flex;flex-direction:column;gap:1.5rem}
-.sk-group-label{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.65rem}
-.skills-chips{display:flex;flex-wrap:wrap;gap:.45rem}.sk-chip{font-size:.78rem;color:var(--muted2);border:1px solid var(--border2);padding:.28rem .75rem;border-radius:3px;transition:all .18s;cursor:default}.sk-chip:hover{border-color:var(--gold);color:var(--gold2)}
-#formacao{background:var(--ink)}
-.form-list{display:flex;flex-direction:column;gap:.4rem}
-.form-row{display:grid;grid-template-columns:100px 1fr auto;align-items:center;gap:1rem;padding:.85rem 1rem;border-radius:4px;transition:background .2s}.form-row:hover{background:var(--card)}
-.form-y{font-family:'Fraunces',serif;font-size:.85rem;color:var(--gold);font-weight:600}
-.form-t{font-size:.925rem;color:var(--cream);font-weight:500}.form-t small{font-size:.8rem;color:var(--muted);font-weight:400}
-.form-meta{display:flex;flex-direction:column;align-items:flex-end;gap:.35rem;min-width:130px}
-.form-inst{font-size:.8rem;color:var(--muted)}.form-badge{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:rgba(201,151,58,.12);color:var(--gold2);border:1px solid rgba(201,151,58,.25);padding:.18rem .6rem;border-radius:3px}
-#depoimentos{background:var(--ink2)}
-.carousel-wrap{overflow:hidden}.carousel-track{display:flex;transition:transform .45s cubic-bezier(.4,0,.2,1);gap:1.25rem}
-.dep-card{flex:0 0 calc(33.333% - .84rem);background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2rem}
-.dep-q{font-size:.9rem;color:var(--muted2);line-height:1.8;margin-bottom:1.5rem;font-style:italic}.dep-q::before{content:'"';font-family:'Fraunces',serif;font-size:2.5rem;color:var(--gold);line-height:0;vertical-align:-.4em;margin-right:.1rem;font-style:normal}
-.dep-name{font-size:.875rem;font-weight:600;color:var(--cream);margin-bottom:.15rem}.dep-role{font-size:.78rem;color:var(--muted)}
-.carousel-nav{display:flex;align-items:center;gap:1rem;margin-top:1.75rem}
-.carousel-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--border2);background:transparent;color:var(--muted2);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center}.carousel-btn:hover{border-color:var(--gold);color:var(--gold)}
-.carousel-dots{display:flex;gap:.5rem}.cdot{width:6px;height:6px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .2s}.cdot.active{background:var(--gold);width:18px;border-radius:3px}
-#contato{background:var(--ink);text-align:center;padding:8rem 6vw}
-.contato-title{font-family:'Fraunces',serif;font-size:clamp(2.2rem,4.5vw,4rem);font-weight:600;letter-spacing:-.02em;margin-bottom:1rem;line-height:1.1}.contato-title em{font-style:italic;color:var(--gold2)}
-.contato-sub{font-size:1rem;color:var(--muted);max-width:440px;margin:0 auto 2.5rem;line-height:1.7}
-.contato-row{display:flex;gap:1rem;justify-content:center}
-.c-link{display:inline-flex;align-items:center;gap:.6rem;font-size:.875rem;font-weight:500;text-decoration:none;padding:.7rem 1.6rem;border-radius:4px;transition:all .2s}
-.c-link.gold{background:var(--gold);color:var(--ink);font-weight:600}.c-link.gold:hover{background:var(--gold2);transform:translateY(-1px)}
-footer{padding:2rem 6vw;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-.footer-logo{font-family:'Fraunces',serif;font-size:.95rem;color:var(--muted)}.footer-logo em{color:var(--gold);font-style:italic}
-.footer-copy{font-size:.78rem;color:var(--muted)}
-.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}.reveal.visible{opacity:1;transform:translateY(0)}
-@media(max-width:900px){.sobre-grid{grid-template-columns:1fr}.case-item{grid-template-columns:1fr}.case-left{border-right:none;border-bottom:1px solid var(--border)}.dep-card{flex:0 0 100%}}
-@media(max-width:640px){.nav-links{display:none}.form-row{grid-template-columns:80px 1fr;gap:.5rem}}
-</style>
-</head>
-<body>
-<nav id="nav">
-  <div class="logo">${primeiro} <em>${resto||cargo}</em></div>
-  <ul class="nav-links">
-    <li><a href="#sobre">Sobre</a></li>
-    ${state.cases.length?'<li><a href="#cases">Cases</a></li>':''}
-    ${state.skills.length?'<li><a href="#skills">Skills</a></li>':''}
-    ${state.forms.length?'<li><a href="#formacao">Formação</a></li>':''}
-    ${state.deps.length?'<li><a href="#depoimentos">Depoimentos</a></li>':''}
-  </ul>
-</nav>
-<section id="hero">
-  <div class="hero-noise"></div>
-  <div class="hero-line"></div>
-  <div class="hero-inner">
-    <div class="hero-label">${cargo} · ${cidade}</div>
-    <h1>${tagline}</h1>
-    ${especialidades?`<p class="hero-role">${especialidades}</p>`:''}
-    ${heroDesc?`<p class="hero-desc">${heroDesc}</p>`:''}
-    <div class="hero-ctas">
-      <a href="#${state.cases.length?'cases':'sobre'}" class="cta-primary">Ver cases</a>
-      ${state.deps.length?'<a href="#depoimentos" class="cta-ghost">O que dizem sobre mim</a>':''}
-    </div>
-  </div>
-</section>
-<section id="sobre">
-  <div class="container">
-    <div class="sobre-grid">
-      <div>
-        <div class="section-header reveal">
-          <div class="section-eyebrow">Sobre</div>
-          <h2 class="section-title">${sobreTitulo}</h2>
-        </div>
-        ${sobreParas||'<p class="sobre-text">Adicione sua história na seção Sobre.</p>'}
-      </div>
-      <div><div class="tl">${tlHtml||'<p style="color:var(--muted);font-size:.9rem">Adicione experiências para montar a timeline.</p>'}</div></div>
-    </div>
-  </div>
-</section>
-${state.cases.length?`<section id="cases"><div class="container"><div class="section-header reveal"><div class="section-eyebrow">Cases</div><h2 class="section-title">Entregas que ficam<br>na <em>operação</em></h2></div>${casesHtml}</div></section>`:''}
-${state.skills.length?`<section id="skills"><div class="container"><div class="section-header reveal"><div class="section-eyebrow">Competências</div><h2 class="section-title">Skills & <em>domínios</em></h2></div><div class="skills-chips-wrap reveal"><div class="skills-chips-groups">${skillsHtml}</div></div></div></section>`:''}
-${state.forms.length?`<section id="formacao"><div class="container"><div class="section-header reveal"><div class="section-eyebrow">Formação</div><h2 class="section-title">Aprendizado <em>contínuo</em></h2></div><div class="form-list reveal">${formsHtml}</div></div></section>`:''}
-${state.deps.length?`<section id="depoimentos"><div class="container"><div class="section-header reveal"><div class="section-eyebrow">Depoimentos</div><h2 class="section-title">O que dizem<br><em>sobre mim</em></h2></div><div class="reveal"><div class="carousel-wrap"><div class="carousel-track" id="track">${depsHtml}</div></div><div class="carousel-nav"><button class="carousel-btn" id="prev">&#8592;</button><button class="carousel-btn" id="next">&#8594;</button><div class="carousel-dots" id="dots"></div></div></div></div></section>`:''}
-<section id="contato">
-  <div class="container">
-    <h2 class="contato-title reveal">Boa ideia merece<br>uma <em>conversa</em></h2>
-    <p class="contato-sub reveal">Aberto a trocar sobre produto, desafios e oportunidades interessantes.</p>
-    <div class="contato-row reveal"><a href="${esc(linkedin)}" target="_blank" class="c-link gold">LinkedIn</a></div>
-  </div>
-</section>
-<footer>
-  <div class="footer-logo">${primeiro} <em>${resto||cargo}</em></div>
-  <div class="footer-copy">${cargo} · ${cidade} · ${new Date().getFullYear()}</div>
-</footer>
-<script>
-const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')}),{threshold:.1,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.reveal,.tl-item,.case-item').forEach(el=>obs.observe(el));
-document.querySelectorAll('.case-item').forEach((el,i)=>el.style.transitionDelay=i*.1+'s');
-document.querySelectorAll('.tl-item').forEach((el,i)=>el.style.transitionDelay=i*.1+'s');
-window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>40));
-const track=document.getElementById('track');
-if(track){const cards=track.querySelectorAll('.dep-card');const dotsEl=document.getElementById('dots');let cur=0;function getV(){return window.innerWidth<=900?1:3}function buildD(){dotsEl.innerHTML='';const pg=Math.ceil(cards.length/getV());for(let i=0;i<pg;i++){const d=document.createElement('div');d.className='cdot'+(i===0?' active':'');d.onclick=()=>goTo(i*getV());dotsEl.appendChild(d);}}function goTo(idx){const v=getV();const mx=cards.length-v;cur=idx>mx?0:idx<0?mx:idx;const w=cards[0].offsetWidth+20;track.style.transform='translateX(-'+(cur*w)+'px)';dotsEl.querySelectorAll('.cdot').forEach((d,i)=>{d.classList.toggle('active',i===Math.floor(cur/v));});}document.getElementById('prev').onclick=()=>goTo(cur-getV());document.getElementById('next').onclick=()=>goTo(cur+getV());window.addEventListener('resize',()=>{buildD();goTo(0);});buildD();}
-<\/script>
-</body></html>`;
+  const html='<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>\n<title>'+nome+' · '+cargo+'</title>\n<link rel="icon" href="https://ui-avatars.com/api/?name='+initials+'&background='+p.a.replace('#','')+'&color='+p.bg.replace('#','')+'&size=32" type="image/png">\n<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>\n<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>\n<style>\n*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}\n:root{--gold:'+p.a+';--gold2:'+p.b+';--gold3:'+p.c+';--ink:'+p.bg+';--ink2:'+p.bg2+';--muted:'+p.muted+';--muted2:#b0b0c0;--cream:#f9f7f2;--border:'+p.border+';--border2:#38384a;--card:'+p.card+';--card2:#202028}\nhtml{scroll-behavior:smooth}body{background:var(--ink);color:var(--cream);font-family:\'Inter\',sans-serif;font-size:16px;line-height:1.65;overflow-x:hidden}\n::selection{background:var(--gold);color:var(--ink)}::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--ink)}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}\nnav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.1rem 6vw;display:flex;align-items:center;justify-content:space-between;transition:background .4s,border-color .4s;border-bottom:1px solid transparent}\nnav.scrolled{background:rgba(14,14,19,.95);backdrop-filter:blur(20px);border-color:var(--border)}\n.logo{font-family:\'Fraunces\',serif;font-size:1.1rem;font-weight:600;color:var(--cream)}.logo em{color:var(--gold);font-style:italic}\n.nav-links{display:flex;gap:2.5rem;list-style:none}.nav-links a{font-size:.82rem;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}.nav-links a:hover{color:var(--cream)}\n#hero{min-height:100vh;display:flex;align-items:center;padding:8rem 6vw 6rem;position:relative;overflow:hidden}\n.hero-noise{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 55% at 72% 38%,rgba(201,151,58,.07) 0%,transparent 65%)}\n.hero-line{position:absolute;left:6vw;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent 0%,var(--border2) 25%,var(--border2) 75%,transparent 100%);pointer-events:none}\n.hero-inner{max-width:840px;padding-left:2.5rem}\n.hero-label{display:inline-flex;align-items:center;gap:.6rem;font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem}\n.hero-label::before{content:\'\';width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold);animation:glow 2.5s ease-in-out infinite}\n@keyframes glow{0%,100%{box-shadow:0 0 6px var(--gold)}50%{box-shadow:0 0 16px var(--gold2)}}\nh1{font-family:\'Fraunces\',serif;font-size:clamp(3rem,6vw,5.5rem);font-weight:600;line-height:1.04;letter-spacing:-.025em;margin-bottom:1.25rem}h1 em{font-style:italic;color:var(--gold2)}\n.hero-role{font-size:.92rem;color:var(--muted);margin-bottom:1.5rem}.hero-desc{font-size:1.05rem;color:var(--muted2);max-width:530px;margin-bottom:2.5rem;line-height:1.75;border-left:2px solid var(--border2);padding-left:1.25rem}.hero-desc strong{color:var(--cream);font-weight:500}\n.hero-ctas{display:flex;gap:1rem;flex-wrap:wrap}\n.cta-primary{background:var(--gold);color:var(--ink);padding:.7rem 1.8rem;border-radius:4px;font-size:.88rem;font-weight:600;text-decoration:none;transition:all .2s}.cta-primary:hover{background:var(--gold2);transform:translateY(-1px)}\n.cta-ghost{border:1px solid var(--border2);color:var(--muted2);padding:.7rem 1.8rem;border-radius:4px;font-size:.88rem;text-decoration:none;transition:all .2s}.cta-ghost:hover{border-color:var(--gold);color:var(--gold)}\nsection{padding:7rem 6vw}.container{max-width:1060px;margin:0 auto}\n.section-header{margin-bottom:3.5rem}.section-eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:.75rem;margin-bottom:.8rem}.section-eyebrow::before{content:\'\';width:20px;height:1px;background:var(--gold)}\n.section-title{font-family:\'Fraunces\',serif;font-size:clamp(1.9rem,3.2vw,2.8rem);font-weight:600;line-height:1.1;letter-spacing:-.02em}.section-title em{font-style:italic;color:var(--gold2)}\n#sobre{background:var(--ink2)}.sobre-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:5rem;align-items:start}\n.sobre-text{color:var(--muted2);line-height:1.8;margin-bottom:1.1rem;font-size:.975rem}.sobre-text strong{color:var(--cream);font-weight:500}\n.tl{display:flex;flex-direction:column;gap:0}.tl-item{display:grid;grid-template-columns:72px 16px 1fr;gap:0 .75rem;padding-bottom:2rem;position:relative;opacity:0;transform:translateX(16px);transition:all .5s ease}.tl-item.visible{opacity:1;transform:translateX(0)}\n.tl-item:not(:last-child) .tl-track::after{content:\'\';position:absolute;top:22px;bottom:0;left:7px;width:1px;background:var(--border2)}.tl-track{position:relative;display:flex;justify-content:center;padding-top:4px}\n.tl-dot{width:14px;height:14px;border-radius:50%;background:var(--gold);border:2px solid var(--ink2);box-shadow:0 0 8px rgba(201,151,58,.4);flex-shrink:0;margin-top:2px}\n.tl-year{font-family:\'Fraunces\',serif;font-size:.8rem;color:var(--gold);font-weight:600;padding-top:.15rem;text-align:right;line-height:1.3}.tl-role{font-size:.95rem;font-weight:600;color:var(--cream);margin-bottom:.15rem}.tl-co{font-size:.8rem;color:var(--muted);margin-bottom:.4rem}.tl-desc{font-size:.865rem;color:var(--muted2);line-height:1.65}\n#cases{background:var(--ink)}.case-item{display:grid;grid-template-columns:1fr 2fr;border:1px solid var(--border);border-radius:6px;margin-bottom:1.25rem;overflow:hidden;opacity:0;transform:translateY(24px);transition:opacity .5s ease,transform .5s ease,border-color .25s}.case-item.visible{opacity:1;transform:translateY(0)}.case-item:hover{border-color:rgba(201,151,58,.35)}\n.case-left{background:var(--card);padding:2rem 1.75rem;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:space-between}.case-number{font-family:\'Fraunces\',serif;font-size:3rem;font-weight:600;color:var(--border2);line-height:1;margin-bottom:auto}\n.case-badge{display:inline-block;font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,151,58,.35);padding:.3rem .75rem;border-radius:3px;margin-bottom:.75rem}\n.case-title{font-family:\'Fraunces\',serif;font-size:1.15rem;font-weight:600;color:var(--cream);line-height:1.25;margin-bottom:.3rem}.case-co{font-size:.8rem;color:var(--muted)}.case-right{background:var(--card2);padding:2rem}\n.case-bullets{list-style:none;display:flex;flex-direction:column;gap:.65rem;margin-bottom:1.5rem}.case-bullets li{font-size:.875rem;color:var(--muted2);line-height:1.6;padding-left:1.1rem;position:relative}.case-bullets li::before{content:\'—\';position:absolute;left:0;color:var(--gold);font-size:.75rem;top:.05rem}\n.case-chips{display:flex;flex-wrap:wrap;gap:.45rem}.chip{font-size:.72rem;color:var(--muted2);border:1px solid var(--border2);padding:.25rem .7rem;border-radius:3px}\n#skills{background:var(--ink2)}.skills-chips-wrap{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:2rem}.skills-chips-groups{display:flex;flex-direction:column;gap:1.5rem}\n.sk-group-label{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.65rem}.skills-chips{display:flex;flex-wrap:wrap;gap:.45rem}.sk-chip{font-size:.78rem;color:var(--muted2);border:1px solid var(--border2);padding:.28rem .75rem;border-radius:3px;transition:all .18s;cursor:default}.sk-chip:hover{border-color:var(--gold);color:var(--gold2)}\n#formacao{background:var(--ink)}.form-list{display:flex;flex-direction:column;gap:.4rem}.form-row{display:grid;grid-template-columns:100px 1fr auto;align-items:center;gap:1rem;padding:.85rem 1rem;border-radius:4px;transition:background .2s}.form-row:hover{background:var(--card)}\n.form-y{font-family:\'Fraunces\',serif;font-size:.85rem;color:var(--gold);font-weight:600}.form-t{font-size:.925rem;color:var(--cream);font-weight:500}.form-t small{font-size:.8rem;color:var(--muted);font-weight:400}\n.form-meta{display:flex;flex-direction:column;align-items:flex-end;gap:.35rem;min-width:130px}.form-inst{font-size:.8rem;color:var(--muted)}.form-badge{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:rgba(201,151,58,.12);color:var(--gold2);border:1px solid rgba(201,151,58,.25);padding:.18rem .6rem;border-radius:3px}\n#depoimentos{background:var(--ink2)}.carousel-wrap{overflow:hidden}.carousel-track{display:flex;transition:transform .45s cubic-bezier(.4,0,.2,1);gap:1.25rem}\n.dep-card{flex:0 0 calc(33.333% - .84rem);background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2rem}.dep-q{font-size:.9rem;color:var(--muted2);line-height:1.8;margin-bottom:1.5rem;font-style:italic}.dep-q::before{content:\'\\201C\';font-family:\'Fraunces\',serif;font-size:2.5rem;color:var(--gold);line-height:0;vertical-align:-.4em;margin-right:.1rem;font-style:normal}\n.dep-name{font-size:.875rem;font-weight:600;color:var(--cream);margin-bottom:.15rem}.dep-role{font-size:.78rem;color:var(--muted)}\n.carousel-nav{display:flex;align-items:center;gap:1rem;margin-top:1.75rem}.carousel-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--border2);background:transparent;color:var(--muted2);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center}.carousel-btn:hover{border-color:var(--gold);color:var(--gold)}\n.carousel-dots{display:flex;gap:.5rem}.cdot{width:6px;height:6px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .2s}.cdot.active{background:var(--gold);width:18px;border-radius:3px}\n#contato{background:var(--ink);text-align:center;padding:8rem 6vw}.contato-title{font-family:\'Fraunces\',serif;font-size:clamp(2.2rem,4.5vw,4rem);font-weight:600;letter-spacing:-.02em;margin-bottom:1rem;line-height:1.1}.contato-title em{font-style:italic;color:var(--gold2)}\n.contato-sub{font-size:1rem;color:var(--muted);max-width:440px;margin:0 auto 2.5rem;line-height:1.7}.contato-row{display:flex;gap:1rem;justify-content:center}\n.c-link{display:inline-flex;align-items:center;gap:.6rem;font-size:.875rem;font-weight:500;text-decoration:none;padding:.7rem 1.6rem;border-radius:4px;transition:all .2s}.c-link.gold{background:var(--gold);color:var(--ink);font-weight:600}.c-link.gold:hover{background:var(--gold2);transform:translateY(-1px)}\nfooter{padding:2rem 6vw;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}.footer-logo{font-family:\'Fraunces\',serif;font-size:.95rem;color:var(--muted)}.footer-logo em{color:var(--gold);font-style:italic}.footer-copy{font-size:.78rem;color:var(--muted)}\n.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}.reveal.visible{opacity:1;transform:translateY(0)}\n@media(max-width:900px){.sobre-grid{grid-template-columns:1fr}.case-item{grid-template-columns:1fr}.case-left{border-right:none;border-bottom:1px solid var(--border)}.dep-card{flex:0 0 100%}}\n@media(max-width:640px){.nav-links{display:none}.form-row{grid-template-columns:80px 1fr;gap:.5rem}}\n</style>\n</head>\n<body>\n<nav id="nav">\n  <div class="logo">'+primeiro+' <em>'+(resto||cargo)+'</em></div>\n  <ul class="nav-links">\n    <li><a href="#sobre">Sobre</a></li>\n    '+(state.cases.length?'<li><a href="#cases">Cases</a></li>':'')+'\n    '+(state.skills.length?'<li><a href="#skills">Skills</a></li>':'')+'\n    '+(state.forms.length?'<li><a href="#formacao">Formação</a></li>':'')+'\n    '+(state.deps.length?'<li><a href="#depoimentos">Depoimentos</a></li>':'')+'\n  </ul>\n</nav>\n<section id="hero">\n  <div class="hero-noise"></div><div class="hero-line"></div>\n  <div class="hero-inner">\n    <div class="hero-label">'+cargo+' · '+cidade+'</div>\n    <h1>'+tagline+'</h1>\n    '+(especialidades?'<p class="hero-role">'+especialidades+'</p>':'')+'\n    '+(heroDesc?'<p class="hero-desc">'+heroDesc+'</p>':'')+'\n    <div class="hero-ctas">\n      <a href="#'+(state.cases.length?'cases':'sobre')+'" class="cta-primary">Ver cases</a>\n      '+(state.deps.length?'<a href="#depoimentos" class="cta-ghost">O que dizem sobre mim</a>':'')+'\n    </div>\n  </div>\n</section>\n<section id="sobre"><div class="container"><div class="sobre-grid">\n  <div>\n    <div class="section-header reveal"><div class="section-eyebrow">Sobre</div><h2 class="section-title">'+sobreTitulo+'</h2></div>\n    '+(sobreParas||'<p class="sobre-text">Adicione sua história na seção Sobre.</p>')+'\n  </div>\n  <div><div class="tl">'+(tlHtml||'<p style="color:var(--muted);font-size:.9rem">Adicione experiências para montar a timeline.</p>')+'</div></div>\n</div></div></section>\n'+(state.cases.length?'<section id="cases"><div class="container"><div class="section-header reveal"><div class="section-eyebrow">Cases</div><h2 class="section-title">Entregas que ficam<br>na <em>operação</em></h2></div>'+casesHtml+'</div></section>':'')+'\n'+(state.skills.length?'<section id="skills"><div class="container"><div class="section-header reveal"><div class="section-eyebrow">Competências</div><h2 class="section-title">Skills & <em>domínios</em></h2></div><div class="skills-chips-wrap reveal"><div class="skills-chips-groups">'+skillsHtml+'</div></div></div></section>':'')+'\n'+(state.forms.length?'<section id="formacao"><div class="container"><div class="section-header reveal"><div class="section-eyebrow">Formação</div><h2 class="section-title">Aprendizado <em>contínuo</em></h2></div><div class="form-list reveal">'+formsHtml+'</div></div></section>':'')+'\n'+(state.deps.length?'<section id="depoimentos"><div class="container"><div class="section-header reveal"><div class="section-eyebrow">Depoimentos</div><h2 class="section-title">O que dizem<br><em>sobre mim</em></h2></div><div class="reveal"><div class="carousel-wrap"><div class="carousel-track" id="track">'+depsHtml+'</div></div><div class="carousel-nav"><button class="carousel-btn" id="prev">&#8592;</button><button class="carousel-btn" id="next">&#8594;</button><div class="carousel-dots" id="dots"></div></div></div></div></section>':'')+'\n<section id="contato"><div class="container">\n  <h2 class="contato-title reveal">Boa ideia merece<br>uma <em>conversa</em></h2>\n  <p class="contato-sub reveal">Aberto a trocar sobre produto, desafios e oportunidades.</p>\n  <div class="contato-row reveal"><a href="'+esc(linkedin)+'" target="_blank" class="c-link gold">LinkedIn</a></div>\n</div></section>\n<footer><div class="footer-logo">'+primeiro+' <em>'+(resto||cargo)+'</em></div><div class="footer-copy">'+cargo+' · '+cidade+' · '+new Date().getFullYear()+'</div></footer>\n<script>\nconst obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add(\'visible\')}),{threshold:.1,rootMargin:\'0px 0px -40px 0px\'});\ndocument.querySelectorAll(\'.reveal,.tl-item,.case-item\').forEach(el=>obs.observe(el));\ndocument.querySelectorAll(\'.case-item\').forEach((el,i)=>el.style.transitionDelay=i*.1+\'s\');\ndocument.querySelectorAll(\'.tl-item\').forEach((el,i)=>el.style.transitionDelay=i*.1+\'s\');\nwindow.addEventListener(\'scroll\',()=>document.getElementById(\'nav\').classList.toggle(\'scrolled\',scrollY>40));\nconst track=document.getElementById(\'track\');\nif(track){const cards=track.querySelectorAll(\'.dep-card\');const dotsEl=document.getElementById(\'dots\');let cur=0;function getV(){return window.innerWidth<=900?1:3}function buildD(){dotsEl.innerHTML=\'\';const pg=Math.ceil(cards.length/getV());for(let i=0;i<pg;i++){const d=document.createElement(\'div\');d.className=\'cdot\'+(i===0?\' active\':\'\');d.onclick=()=>goTo(i*getV());dotsEl.appendChild(d);}}function goTo(idx){const v=getV();const mx=cards.length-v;cur=idx>mx?0:idx<0?mx:idx;const w=cards[0].offsetWidth+20;track.style.transform=\'translateX(-\'+(cur*w)+\'px)\';dotsEl.querySelectorAll(\'.cdot\').forEach((d,i)=>{d.classList.toggle(\'active\',i===Math.floor(cur/v));});}document.getElementById(\'prev\').onclick=()=>goTo(cur-getV());document.getElementById(\'next\').onclick=()=>goTo(cur+getV());window.addEventListener(\'resize\',()=>{buildD();goTo(0);});buildD();}\n<\/script>\n</body></html>';
 
   const blob=new Blob([html],{type:'text/html'});
   const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;a.download='index.html';a.click();
-  URL.revokeObjectURL(url);
-
-  // Show tutorial
-  for(let i=1;i<=TOTAL;i++){
-    const s=document.getElementById('step'+i);
-    if(s)s.classList.remove('active');
-  }
-  document.getElementById('progBar').style.display='none';
-  const tut=document.getElementById('tutorial');
-  tut.style.display='block';
-  tut.classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
+  const a=document.createElement('a');a.href=url;a.download='index.html';a.click();URL.revokeObjectURL(url);
+  show('screen-tutorial');
 }
 </script>
 </body>

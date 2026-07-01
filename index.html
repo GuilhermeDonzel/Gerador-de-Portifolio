@@ -136,7 +136,7 @@ main{max-width:800px;margin:0 auto;padding:2.5rem 6vw 6rem}
 <header>
   <div>
     <div class="logo">Gerador de <em>Portfólio</em></div>
-    <div class="logo-sub">Powered by Claude AI</div>
+    <div class="logo-sub">Importe seu LinkedIn e gere seu portfólio</div>
   </div>
 </header>
 <main>
@@ -186,7 +186,7 @@ main{max-width:800px;margin:0 auto;padding:2.5rem 6vw 6rem}
   <button class="btn-back" id="btn-back" onclick="show('screen-upload')" style="display:none">← Voltar ao upload</button>
   <div class="ai-banner" id="ai-banner" style="display:none">
     <span>✨</span>
-    <span>Campos preenchidos automaticamente pelo Claude AI — revise e ajuste antes de gerar.</span>
+    <span>Campos preenchidos a partir do seu LinkedIn — revise e complete antes de gerar.</span>
   </div>
   <div class="prog-bar" id="progBar">
     <div class="prog-seg active" onclick="jumpTo(1)">1. Pessoal</div>
@@ -459,17 +459,16 @@ async function handleFile(input,type){
   const file=input.files[0];if(!file)return;
   show('screen-loading');
   try{
-    let jsonText='';
+    let rawText='';
     if(type==='pdf'){
       document.getElementById('loading-msg').innerHTML='Lendo o PDF do LinkedIn...<br>Extraindo nome, cargo e experiências.';
-      const base64=await fileToBase64(file);
-      jsonText=await extractWithClaude(base64,file.type);
+      rawText=await readPdfText(file);
     }else{
       document.getElementById('loading-msg').innerHTML='Lendo o arquivo ZIP do LinkedIn...<br>Processando dados de experiência e formação.';
-      const csvText=await readZip(file);
-      jsonText=await extractFromText(csvText);
+      rawText=await readZipText(file);
     }
-    fillForm(jsonText);
+    if(!rawText||rawText.length<50) throw new Error('Texto insuficiente');
+    parseAndFill(rawText);
     document.getElementById('ai-banner').style.display='flex';
     showForm(true);
   }catch(err){
@@ -479,43 +478,173 @@ async function handleFile(input,type){
   }
 }
 
-function fileToBase64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=()=>rej(new Error('Erro ao ler'));r.readAsDataURL(file);});}
-
-async function readZip(file){
-  const buf=await file.arrayBuffer();const bytes=new Uint8Array(buf);
-  let text='';for(let i=0;i<bytes.length;i++){const c=bytes[i];if(c>=32&&c<127)text+=String.fromCharCode(c);else if(c===10||c===13)text+='\n';}
-  return text.split('\n').filter(l=>l.length>5&&(l.includes(',')||l.includes('"'))).slice(0,300).join('\n');
+// ── Lê PDF usando PDF.js (CDN) ──
+async function readPdfText(file){
+  if(!window.pdfjsLib){
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+  const buf=await file.arrayBuffer();
+  const pdf=await window.pdfjsLib.getDocument({data:buf}).promise;
+  let text='';
+  for(let i=1;i<=pdf.numPages;i++){
+    const page=await pdf.getPage(i);
+    const content=await page.getTextContent();
+    text+=content.items.map(item=>item.str).join(' ')+'\n';
+  }
+  return text;
 }
 
-const PROMPT_BASE=`Extraia as informações do perfil/CV do LinkedIn e retorne APENAS um JSON válido, sem markdown, sem explicações, sem texto antes ou depois:
-{"nome":"","cargo":"","cidade":"","linkedin":"","tagline":"Frase inspiradora sobre o profissional","especialidades":"Área1 · Área2 · Área3","hero_desc":"Parágrafo curto e poderoso sobre o diferencial","sobre_titulo":"Título criativo para seção sobre","sobre_texto":"Narrativa em 3-4 parágrafos separados por linha em branco, cada um sobre uma fase/empresa da carreira","experiencias":[{"periodo":"2024 / Atual","cargo":"","empresa":"","contexto":"Segmento · Modalidade","desc":"O que fez e entregou"}],"formacoes":[{"ano":"","inst":"","titulo":"","desc":""}],"skills":[{"grupo":"Nome do grupo","items":"skill1, skill2, skill3"}]}
-Regras: tagline inspiradora; sobre_texto narrativo e fluido; especialidades com · entre elas; mínimo 3 grupos de skills; se dado não disponível use string vazia.`;
-
-async function extractWithClaude(base64,mimeType){
-  const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:2000,messages:[{role:'user',content:[{type:'document',source:{type:'base64',media_type:mimeType||'application/pdf',data:base64}},{type:'text',text:PROMPT_BASE}]}]})});
-  if(!res.ok)throw new Error('API '+res.status);
-  const data=await res.json();
-  return data.content.filter(c=>c.type==='text').map(c=>c.text).join('');
+// ── Lê ZIP extraindo texto dos CSVs ──
+async function readZipText(file){
+  const buf=await file.arrayBuffer();
+  const bytes=new Uint8Array(buf);
+  let text='';
+  for(let i=0;i<bytes.length;i++){
+    const c=bytes[i];
+    if(c>=32&&c<127)text+=String.fromCharCode(c);
+    else if(c===10||c===13)text+='\n';
+  }
+  return text.split('\n').filter(l=>l.length>5).slice(0,400).join('\n');
 }
 
-async function extractFromText(csvText){
-  const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:2000,messages:[{role:'user',content:PROMPT_BASE+'\n\nDados do LinkedIn:\n'+csvText.substring(0,8000)}]})});
-  if(!res.ok)throw new Error('API '+res.status);
-  const data=await res.json();
-  return data.content.filter(c=>c.type==='text').map(c=>c.text).join('');
+function loadScript(src){
+  return new Promise((res,rej)=>{
+    const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);
+  });
 }
 
-function fillForm(jsonText){
-  try{
-    const d=JSON.parse(jsonText.replace(/```json|```/g,'').trim());
-    set('nome',d.nome);set('cargo',d.cargo);set('cidade',d.cidade);set('linkedin',d.linkedin);
-    set('tagline',d.tagline);set('especialidades',d.especialidades);set('hero_desc',d.hero_desc);
-    set('sobre_titulo',d.sobre_titulo);set('sobre_texto',d.sobre_texto);
-    state.exps=[];(d.experiencias||[]).forEach(e=>state.exps.push({periodo:e.periodo||'',cargo:e.cargo||'',empresa:e.empresa||'',contexto:e.contexto||'',desc:e.desc||''}));renderList('exp-list');
-    state.forms=[];(d.formacoes||[]).forEach(f=>state.forms.push({ano:f.ano||'',inst:f.inst||'',titulo:f.titulo||'',desc:f.desc||''}));renderList('form-list');
-    state.skills=[];(d.skills||[]).forEach(s=>state.skills.push({grupo:s.grupo||'',items:s.items||''}));renderList('skill-list');
-  }catch(e){console.warn('Parse error:',e);}
+// ── Parser local: extrai dados do texto sem API ──
+function parseAndFill(text){
+  const lines=text.split(/\n/).map(l=>l.trim()).filter(l=>l.length>1);
+
+  // Nome: pula seção de competências e cabeçalho, busca nome real
+  let nome='', cargo='', cidade='', linkedin='';
+  // Detecta se tem seção "Principais competências" para pular
+  let startIdx=0;
+  for(let i=0;i<Math.min(lines.length,20);i++){
+    if(/principais competências|top skills/i.test(lines[i])){
+      // Pula as competências (geralmente 3-5 linhas)
+      startIdx=i+6; break;
+    }
+  }
+  for(let i=startIdx;i<Math.min(lines.length,startIdx+15);i++){
+    const l=lines[i];
+    if(/linkedin\.com\/in\//i.test(l)){linkedin='https://'+l.replace(/.*?(linkedin\.com)/,'$1');continue;}
+    if(!nome && l.length>3 && l.length<60 && !/linkedin\.com|@|http|competên|contato|resumo|geração|eficiência|parcerias|negócios/i.test(l) && /^[A-ZÀ-Ú][a-záàâãéêíóôõúüç]/.test(l) && l.split(' ').length>=2){
+      nome=l; continue;
+    }
+    if(nome && !cargo && l.length>5 && l.length<150 && !/linkedin\.com|@|http/i.test(l)){
+      cargo=l; continue;
+    }
+    if(nome && cargo && !cidade && /brasil|são paulo|rio de janeiro|belo horizonte|curitiba|porto alegre|,\s*(sp|rj|mg|pr|rs|ba|ce|go|pe)/i.test(l)){
+      cidade=l; continue;
+    }
+  }
+
+  // Experiências: busca padrões de cargo + empresa + período
+  const exps=[];
+  const expPattern=/(\d{4})\s*[-–]\s*(present|atual|o momento|\d{4})/gi;
+  let expBlock='';
+  let inExp=false;
+  for(let i=0;i<lines.length;i++){
+    const l=lines[i];
+    if(/experiência|experience|histórico profissional/i.test(l)){inExp=true;continue;}
+    if(/formação|education|certificações|competências|habilidades/i.test(l)){inExp=false;}
+    if(inExp) expBlock+=l+'\n';
+  }
+  // Se não achou bloco, usa o texto todo
+  if(!expBlock) expBlock=text;
+
+  // Extrai pares cargo/empresa do bloco
+  const expLines=expBlock.split('\n').map(l=>l.trim()).filter(l=>l.length>2);
+  let i=0;
+  while(i<expLines.length&&exps.length<8){
+    const l=expLines[i];
+    const periodoMatch=l.match(/(\w+\s+de\s+\d{4}|\d{4})\s*[-–]\s*(present|atual|o momento|\w+\s+de\s+\d{4}|\d{4})/i);
+    if(periodoMatch){
+      const periodo=l.replace(/\(.*?\)/g,'').trim();
+      const expCargo=i>0?expLines[i-1]:'';
+      const expEmpresa=i>1?expLines[i-2]:'';
+      const descLines=[];
+      let j=i+1;
+      while(j<expLines.length&&j<i+6){
+        const next=expLines[j];
+        if(!next.match(/(\w+\s+de\s+\d{4}|\d{4})\s*[-–]/i)&&next.length>5) descLines.push(next);
+        else break;
+        j++;
+      }
+      if(expCargo&&expCargo.length>3){
+        exps.push({
+          periodo: formatPeriodo(periodo),
+          cargo: expCargo,
+          empresa: expEmpresa&&expEmpresa.length>2?expEmpresa:'',
+          contexto:'',
+          desc: descLines.join(' ').substring(0,300)
+        });
+      }
+    }
+    i++;
+  }
+
+  // Formações
+  const forms=[];
+  let inForm=false;
+  const formLines=[];
+  for(const l of lines){
+    if(/formação|educação|education/i.test(l)){inForm=true;continue;}
+    if(inForm&&l.length>3) formLines.push(l);
+    if(inForm&&formLines.length>20) break;
+  }
+  for(let fi=0;fi<formLines.length-1;fi++){
+    const yearMatch=formLines[fi].match(/\d{4}/);
+    if(yearMatch&&formLines[fi-1]){
+      forms.push({ano:yearMatch[0],inst:formLines[fi-1]||'',titulo:formLines[fi]||'',desc:''});
+    }
+  }
+
+  // Skills: busca seção de competências
+  const skills=[];
+  let inSkills=false;
+  const skillLines=[];
+  for(const l of lines){
+    if(/competências|habilidades|skills|principais competências/i.test(l)){inSkills=true;continue;}
+    if(inSkills&&/experiência|formação|education|resumo/i.test(l)){inSkills=false;}
+    if(inSkills&&l.length>2&&l.length<80) skillLines.push(l);
+  }
+  if(skillLines.length>0){
+    skills.push({grupo:'Competências',items:skillLines.slice(0,12).join(', ')});
+  }
+
+  // Preenche o formulário
+  set('nome', nome);
+  set('cargo', cargo);
+  set('cidade', cidade);
+  set('linkedin', linkedin);
+  set('tagline', cargo?`${cargo} com foco em resultados e impacto real`:'Construindo resultados com propósito');
+  set('especialidades', cargo);
+  set('hero_desc','');
+  set('sobre_titulo', nome?`A trajetória de ${nome.split(' ')[0]}`:'Uma trajetória construída com propósito');
+
+  // Monta sobre_texto a partir das experiências
+  const sobreParas=exps.slice(0,4).map(e=>`Na ${e.empresa||'empresa'}, atuei como ${e.cargo}. ${e.desc}`).join('\n\n');
+  set('sobre_texto', sobreParas||'');
+
+  state.exps=exps;renderList('exp-list');
+  state.forms=forms;renderList('form-list');
+  state.skills=skills;renderList('skill-list');
 }
+
+function formatPeriodo(str){
+  const now=/present|atual|o momento/i.test(str);
+  const years=str.match(/\d{4}/g)||[];
+  if(years.length===0) return str;
+  if(now) return years[0]+' / Atual';
+  if(years.length>=2) return years[0]+' / '+years[1];
+  return years[0];
+}
+
+
 
 function showForm(fromAI){show('screen-form');if(fromAI){document.getElementById('ai-banner').style.display='flex';document.getElementById('btn-back').style.display='none';}else{document.getElementById('btn-back').style.display='inline-flex';}}
 
